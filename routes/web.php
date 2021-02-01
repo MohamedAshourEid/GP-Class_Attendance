@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $data=[];
+    $data=[ ];
     $data['id']=20170166;
     $data['name']='alaa ebrahim';
     $data['age']=21;
