@@ -11,6 +11,6 @@ class AttendanceController extends Controller
         $courseID = $req->courseID;
         // database part to add courseID and lecID into lecture table
         $lecID = "lecID33"; // get it from database
-        return redirect('displayQR/'.$lecID);
+        return view('staff/QrCode',['id' => $lecID]);
     }
 }
