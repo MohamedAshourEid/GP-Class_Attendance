@@ -15,17 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
-    //return $request->user();
+//return $request->user();
 
 //});
 
-Route::get('doctors',function (){
-    $doctors=[['name'=>'osama esmail',
-        'id'=>'20070145',
-        'email'=>'osama145@gmail.com'],
-        ['name'=>'galal eldien',
-        'id'=>'200150120',
-        'email'=>'galal145@gmail.com']
-    ];
-    return $doctors;
-});
+Route::post('signup','User\UserControllerApi@save_data');
+Route::post('login','User\UserControllerApi@validate_login');

@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $data=[ ];
+    /*$data=[ ];
     $data['id']=20170166;
     $data['name']='alaa ebrahim';
-    $data['age']=21;
-    return view('welcome')->with('data',$data);
+    $data['age']=21;*/
+    return view('welcome');
 });
 //another way to send data in route to view
 //Route::get('/', function () {

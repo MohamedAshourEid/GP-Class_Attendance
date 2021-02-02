@@ -70,7 +70,7 @@
                 <div class="title m-b-md">
                     Laravel
                 </div>
-                <h>{{__('messages.welcome')}}</h>
+                <h></h>
 
 
             </div>
