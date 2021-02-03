@@ -40,6 +40,7 @@ class UserController extends Controller
      //validata sign up data and save in database
     public function save_data(Request $request)
     {
+
         $validator=$this->validata_up($request);
 
         if($validator->fails())
@@ -51,6 +52,7 @@ class UserController extends Controller
             'full_name'=>$request->full_name,
             'email'=>$request->email,
             'password'=>Hash::make($request->password),
+
 
         ]);
         return redirect()->back()->with(['success'=>'Signed Up Successfully']);
