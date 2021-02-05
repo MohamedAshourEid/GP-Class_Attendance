@@ -68,7 +68,7 @@ Route::group(['prefix'=>'Registeration'],function(){
     Route::post('validate','User\UserController@validate_login')->name('validate');
 });
 
-Route::post('newLec','AttendanceController@generateQrCode');
+Route::post('newLec','QrCode\QrCodeController@generateQrCode');
 Route::view('course','staff/course');
 
 
