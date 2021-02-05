@@ -11,7 +11,7 @@
 <form action="newLec" method="post">
     {{@csrf_field()}}
 
-    <input type="hidden" name="courseID" value="courseID"> <br>
+    <input type="hidden" name="courseID" value="CS150"> <br>
     <input type="radio" name="type" value="Lec"> lec <br>
     <input type="radio" name="type" value="Lab"> lab <br>
     <input type="submit" value="generate" formtarget="_blank">
