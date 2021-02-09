@@ -21,3 +21,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('signup','User\UserControllerApi@save_data');
 Route::post('login','User\UserControllerApi@validate_login');
+
+Route::post('attend_lec','ApiAttendance\AttendanceController@attendLecture');
+

@@ -7,7 +7,7 @@
     <h1> Laravel QR Code Generator Example </h1>
 
 
-    {!! QrCode::size(200)->generate($id);!!}
+    {!! QrCode::size(200)->generate($qrContent);!!}
 
 </div>
 </body>

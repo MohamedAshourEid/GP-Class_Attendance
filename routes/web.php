@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     /*$data=[ ];
     $data['id']=20170166;
     $data['name']='alaa ebrahim';
@@ -68,7 +68,7 @@ Route::group(['prefix'=>'Registeration'],function(){
     Route::post('validate','User\UserController@validate_login')->name('validate');
 });
 
-Route::post('newLec','AttendanceController@newLec');
+Route::post('newLec','QrCode\QrCodeController@generateQrCode');
 Route::view('course','staff/course');
 
 

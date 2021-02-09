@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\Doctor;
+use App\Models\Instructor;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -40,70 +41,29 @@ class UserController extends Controller
      //validata sign up data and save in database
     public function save_data(Request $request)
     {
-        $validator=$this->validata_up($request);
+        $validator=validationController::validata_up($request);
 
         if($validator->fails())
         {
             return redirect()->back()->withErrors($validator)->withInputs($request->all());
         }
-        Doctor::create([
-            'id'=>$request->id,
-            'full_name'=>$request->full_name,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password),
-
-        ]);
+        validationController::insertInDatabase($request);
         return redirect()->back()->with(['success'=>'Signed Up Successfully']);
     }
      //validata login data and check in database
     public function validate_login(Request $request){
 
-        $validator=$this->validata_in($request);
+        $validator=validationController::validata_in($request);
 
         if($validator->fails())
         {
             return redirect()->back()->withErrors($validator)->withInputs($request->all());
         }
 
-        $userData=Doctor::where([['id','=',$request->id],['password','=', $request->password]])->first();
+        $userData=Instructor::where([['id','=',$request->id],['password','=', $request->password]])->first();
 
-        return $this->checkLogin_data($userData);
-        //return $userData;
+        return validationController::checkLogin_data($request);
 
-
-    }
-    //validate data of login
-    public function validata_in(Request $request){
-        $validator=Validator::make($request->all(),[
-            'id'=>'required|numeric|min:6',
-            'password'=>'required|alphaNum|min:8'
-        ]);
-
-        return $validator;
-
-    }
-    //validate data of sign up
-    public function validata_up(Request $request){
-        $validator=Validator::make($request->all(),[
-            'full_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
-            'email'=>'required|email',
-            'id'=>'required|min:6|numeric|unique:doctors,id',
-            'password'=>'required|alphaNum|min:8'
-
-        ]);
-
-        return $validator;
-
-    }
-    //check if the user data is found or not
-    public function checkLogin_data($userData)
-    {
-        if($userData!=null)
-        {
-            return view('welcome');
-        }else{
-            return redirect()->back()->with(['error'=>'ID or Password is invalid']);
-        }
     }
 
 }
