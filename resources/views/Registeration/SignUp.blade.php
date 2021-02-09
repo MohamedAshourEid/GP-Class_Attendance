@@ -11,8 +11,15 @@
 <form action="{{route('store')}}" method="post">
     @csrf
     <div class="input-box">
-        <input type="text" class="input-control" placeholder="Full name" name="full_name" autocomplete="off">
-        @error('full_name')
+        <input type="text" class="input-control" placeholder="First name" name="first_name" autocomplete="off">
+        @error('first_name')
+        <span class="form-text text-danger">{{$message}}</span>
+        @enderror
+    </div>
+
+    <div class="input-box">
+        <input type="text" class="input-control" placeholder="Last name" name="last_name" autocomplete="off">
+        @error('last_name')
         <span class="form-text text-danger">{{$message}}</span>
         @enderror
     </div>

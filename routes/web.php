@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     /*$data=[ ];
     $data['id']=20170166;
     $data['name']='alaa ebrahim';

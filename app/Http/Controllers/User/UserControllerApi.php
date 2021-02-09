@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\Doctor;
+use App\Models\Instructor;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -29,71 +30,27 @@ class UserControllerApi extends Controller
      //validata sign up data and save in database
     public function save_data(Request $request)
     {
-        $validator=$this->validata_up($request);
+        $validator=validationController::validata_up($request);
 
         if($validator->fails())
         {
             return $validator->errors();
         }
-        Doctor::create([
-            'id'=>$request->id,
-            'full_name'=>$request->full_name,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password),
-
-        ]);
+        validationController::insertInDatabase($request);
         return ['success'=>'done'];
     }
      //validata login data and check in database
     public function validate_login(Request $request){
 
-        $validator=$this->validata_in($request);
+        $validator=validationController::validata_in($request);
 
         if($validator->fails())
         {
             return $validator->errors();
         }
 
-        $userData=Doctor::where([['id','=',$request->id],['password','=', $request->password]])->first();
+        return validationController::checkLogin_data_of_api($request);
 
-        return $this->checkLogin_data($userData);
-        //return $userData;
-
-
-    }
-    //validate data of login
-    public function validata_in(Request $request){
-        $validator=Validator::make($request->all(),[
-            'id'=>'required|numeric|min:6',
-            'password'=>'required|alphaNum|min:8'
-        ]);
-
-        return $validator;
-
-    }
-    //validate data of sign up
-    public function validata_up(Request $request){
-        $validator=Validator::make($request->all(),[
-            'full_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
-            'email'=>'required|email',
-            'id'=>'required|min:6|numeric|unique:doctors,id',
-            'password'=>'required|alphaNum|min:8'
-
-        ]);
-
-        return $validator;
-
-    }
-    //check if the user data is found or not
-    public function checkLogin_data($userData)
-    {
-        if($userData!=null)
-        {
-            return ['success'=>'done and login'];
-
-        }else{
-            return ['error'=>'invalid id or password'];
-        }
     }
 
 }
