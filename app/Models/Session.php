@@ -10,4 +10,5 @@ class Session extends Model
     protected $fillable = ['session_id','course_id','instructor_id'];
 
     public $timestamps=false;
+
 }
