@@ -1,5 +1,15 @@
 @extends('layouts.header')
 @section('content')
+
+<script>
+    function validateForm() {
+        var x = document.forms["myForm"]["fname"].value;
+        if (x == "") {
+            alert("Name must be filled out");
+            return false;
+        }
+    }
+</script>
 <div class="container">
     <div class="content">
 <h2 class="heading">Sign Up</h2>
@@ -8,7 +18,7 @@
                 {{Session::get('success')}}
             </div>
         @endif
-<form action="{{route('store')}}" method="post">
+<form action="{{route('store')}}" method="post" onsubmit="return validateForm">
     @csrf
     <div class="input-box">
         <input type="text" class="input-control" placeholder="First name" name="first_name" autocomplete="off">
