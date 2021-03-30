@@ -24,7 +24,7 @@ class validationController extends Controller
     //validate data of sign up
     public static function validata_up(Request $request){
         $validator;
-        if($request->type==1)
+        if($request->role=="instructor")
         {
             $validator=Validator::make($request->all(),[
                 'first_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
@@ -52,7 +52,7 @@ class validationController extends Controller
     public static function checkLogin_data($request)
     {
         $userData;
-        if($request->type==1){
+        if($request->role=="instructor"){
             $userData=Instructor::where([['id','=',$request->id]])->first();
         }
         else{
@@ -69,7 +69,7 @@ class validationController extends Controller
     public static function checkLogin_data_of_api($request)
     {
         $userData;
-        if($request->type==1){
+        if($request->role=="instructor"){
             $userData=Instructor::where([['id','=',$request->id]])->first();
         }
         else{
@@ -86,7 +86,7 @@ class validationController extends Controller
     //insert in databse based on the type of the user student or instructor
     public static function insertInDatabase($request)
     {
-        if($request->type==1)
+        if($request->role=="instructor")
         {
             Instructor::create([
                 'id'=>$request->id,
@@ -99,11 +99,11 @@ class validationController extends Controller
         }
         else{
             Student::create([
-                'student_id'=>$request->id,
+                'id'=>$request->id,
                 'Fname'=>$request->first_name,
                 'Lname'=>$request->last_name,
                 'email'=>$request->email,
-                'password'=>Hash::make($request->password),
+                'password'=>Hash::make($request->password)
 
             ]);
         }
