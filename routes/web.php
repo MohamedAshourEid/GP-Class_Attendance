@@ -52,11 +52,14 @@ Route::get('/home', 'HomeController@index')->name('home')->middleware('verified'
 
 Route::get('getOffers','CrudController@getOffers');
 
-Route::group(['prefix'=>'offers'],function (){
-    //Route::get('store','CrudController@store');
-    Route::get('create','CrudController@create');
-    Route::post('store','CrudController@store')->name('offers.store');
-});
+//Route::group(['prefix'=>'offers'],function (){
+//    //Route::get('store','CrudController@store');
+//    Route::get('create','CrudController@create');
+//    Route::post('store','CrudController@store')->name('offers.store');
+//});
+
+
+
 
 Route::group(['prefix'=>'Registeration'],function(){
     Route::get('signup','User\UserController@signup')->name('signup');
@@ -65,11 +68,14 @@ Route::group(['prefix'=>'Registeration'],function(){
 
     Route::post('store','User\UserController@save_data')->name('store');
 
-    Route::post('validate','User\UserController@validate_login')->name('validate');
+
 });
 
 Route::post('newLec','QrCode\QrCodeController@generateQrCode');
+Route::post('createAccount','User\UserRegistration@signUp')->name("createAccount");
+Route::post('validate','User\UserRegistration@login')->name('validate');
 Route::view('course','staff/course');
 Route::view('signup','Registeration.SignUp');
+Route::get('/courseView/{courseID}','User\Course@showCourse');
 
 

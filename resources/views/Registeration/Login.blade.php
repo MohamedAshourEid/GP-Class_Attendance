@@ -34,6 +34,17 @@
                     <a href="forgot_password.php" class="forgot-password">Forgot password?</a>
                 </div><br>
                 <div class="input-box">
+                    <input type="radio" name="role" value="instructor">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        instructor
+                    </label>
+                    <input type="radio" name="role" value="student">
+                    <label class="form-check-label">
+                        student
+                    </label>
+
+                </div>
+                <div class="input-box">
                     <input type="submit" class="input-submit" value="LOGIN" name="login">
                 </div>
                 <div class="login-cta"><span>Don't have an account?</span> <a href={{route('signup')}}>Sign up here</a></div>
