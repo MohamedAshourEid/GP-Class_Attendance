@@ -1,15 +1,7 @@
 @extends('layouts.header')
 @section('content')
 
-<script>
-    function validateForm() {
-        var x = document.forms["myForm"]["fname"].value;
-        if (x == "") {
-            alert("Name must be filled out");
-            return false;
-        }
-    }
-</script>
+
 <div class="container">
     <div class="content">
 <h2 class="heading">Sign Up</h2>
@@ -18,7 +10,7 @@
                 {{Session::get('success')}}
             </div>
         @endif
-<form action="{{route('store')}}" method="post" onsubmit="return validateForm">
+<form action={{route("createAccount")}} method="post">
     @csrf
     <div class="input-box">
         <input type="text" class="input-control" placeholder="First name" name="first_name" autocomplete="off">
@@ -35,7 +27,7 @@
     </div>
 
     <div class="input-box">
-        <input type="text" class="input-control" placeholder="Email address" name="email" autocomplete="off">
+        <input type="text" class="input-control" required placeholder="Email address" name="email" autocomplete="off" >
         @error('email')
         <span class="form-text text-danger">{{$message}}</span>
         @enderror
@@ -52,6 +44,18 @@
         @error('password')
         <span class="form-text text-danger">{{$message}}</span>
         @enderror
+    </div>
+
+    <div class="input-box">
+        <input type="radio" name="role" value="instructor">
+        <label class="form-check-label" for="flexRadioDefault1">
+            instructor
+        </label>
+        <input type="radio" name="role" value="student">
+        <label class="form-check-label">
+            student
+        </label>
+
     </div>
 
     <div class="input-box">

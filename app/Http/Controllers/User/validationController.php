@@ -29,7 +29,7 @@ class validationController extends Controller
             $validator=Validator::make($request->all(),[
                 'first_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
                 'last_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
-                'email'=>'required|email',
+                'email'=>'required|email', // "/^[^ ]+@[^ ]+\.[a-z]{2,3}$/"
                 'id'=>'required|min:6|numeric|unique:instructors,id',
                 'password'=>'required|alphaNum|min:8'
 
