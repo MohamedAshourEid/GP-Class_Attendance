@@ -14,20 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    /*$data=[ ];
-    $data['id']=20170166;
-    $data['name']='alaa ebrahim';
-    $data['age']=21;*/
     return view('welcome');
 });
-//another way to send data in route to view
-//Route::get('/', function () {
-//$data=[];
-//    $data['id']=20170166;
-//    $data['name']='alaa ebrahim';
-// $data['age']=21;
-//return view('welcome',$data);
-//});
 
 Route::group(['namespace'=>'Admin'],function (){
     Route::get('first', 'AdminController@showString')->middleware('auth');
@@ -35,31 +23,13 @@ Route::group(['namespace'=>'Admin'],function (){
 
 Route::get('index','Admin\AdminController@showIndex');
 
-//Route::get('first', 'Admin\AdminController@showString');
-//Route::get('users', 'Admin\AdminController@showString')->middleware('auth');
-
-/*Route::group(['middleware'=> 'auth'],function(){
-    Route::get('users', 'Admin\AdminController@showString');
-});*/
-
 Route::resource('news' , 'NewsController');//create controller that have all crud operations
-
-
 
 Auth::routes(['verify'=>true]);
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
 Route::get('getOffers','CrudController@getOffers');
-
-//Route::group(['prefix'=>'offers'],function (){
-//    //Route::get('store','CrudController@store');
-//    Route::get('create','CrudController@create');
-//    Route::post('store','CrudController@store')->name('offers.store');
-//});
-
-
-
 
 Route::group(['prefix'=>'Registeration'],function(){
     Route::get('signup','User\UserController@signup')->name('signup');
@@ -71,11 +41,18 @@ Route::group(['prefix'=>'Registeration'],function(){
 
 });
 
+Route::group(['middleware' => 'loggedin'],function (){
+    Route::view('course','staff/course');
+    Route::get('/courseView/{courseID}','User\Course@showCourse');
+    Route::get('getEnrolledCourses','User\Course@getEnrolledCourses')->name('getEnrolledCourses');
+});
+
 Route::post('newLec','QrCode\QrCodeController@generateQrCode');
 Route::post('createAccount','User\UserRegistration@signUp')->name("createAccount");
 Route::post('validate','User\UserRegistration@login')->name('validate');
-Route::view('course','staff/course');
+
 Route::view('signup','Registeration.SignUp');
-Route::get('/courseView/{courseID}','User\Course@showCourse');
+
+
 
 

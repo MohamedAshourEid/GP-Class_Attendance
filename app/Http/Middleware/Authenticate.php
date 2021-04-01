@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
-
+session()->start();
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
@@ -14,8 +14,14 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
-            return route('login');
+        if (!session()->has('instructorID')) {
+            return route('signup');
+//            return redirect('signup');
         }
+//        return $next($request);
+//        if(!session()->has('instructorID')){
+//
+//            return redirect('signup');
+//        }
     }
 }
