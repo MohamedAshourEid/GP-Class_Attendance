@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\User;
+session()->start();
 use App\Models\Teach;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class UserRegistration extends Controller
 {
@@ -49,9 +52,8 @@ class UserRegistration extends Controller
                 return "id or password are wrong";
             }
             else {
-                $teach = new \App\Models\Teach();
-                $courses = $teach->getInctructorCourses($id);
-                return view("staff/Home",['courses' => $courses]);
+                session(['instructorID' => $id]);
+                return redirect()->route('getEnrolledCourses');
             }
         }
         else{
