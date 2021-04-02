@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('home', function () {
+    return view('staff/Home');
+});
+
 Route::group(['namespace'=>'Admin'],function (){
     Route::get('first', 'AdminController@showString')->middleware('auth');
 });
@@ -42,9 +46,9 @@ Route::group(['prefix'=>'Registeration'],function(){
 });
 
 Route::group(['middleware' => 'loggedin'],function (){
-    Route::view('course','staff/course');
+//    Route::view('course','staff/course');
     Route::get('/courseView/{courseID}','User\Course@showCourse');
-    Route::get('getEnrolledCourses','User\Course@getEnrolledCourses')->name('getEnrolledCourses');
+    Route::get('home','User\Course@getEnrolledCourses')->name('home');
 });
 
 Route::post('newLec','QrCode\QrCodeController@generateQrCode');
@@ -52,6 +56,7 @@ Route::post('createAccount','User\UserRegistration@signUp')->name("createAccount
 Route::post('validate','User\UserRegistration@login')->name('validate');
 
 Route::view('signup','Registeration.SignUp');
+
 
 
 

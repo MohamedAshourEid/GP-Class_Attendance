@@ -4,6 +4,11 @@
         <div class="content">
             <h2 class="heading">Login</h2>
 
+            @if($errors->any())
+                <div class="error">{{ $errors->first() }}</div>
+
+            @endif
+
             <!--<div class='notification'>Logged In Successfull</div>-->
             @if(Session::has('error'))
                 <div class="alert alert-success" role="alert">
@@ -13,14 +18,14 @@
             <form action="{{route('validate')}}" method="post">
                 @csrf
                 <div class="input-box">
-                    <input type="text" class="input-control" placeholder="ID please" name="id" >
+                    <input type="text" class="input-control" required placeholder="ID please" name="id" >
                     @error('id')
                     <span class="form-text text-danger">{{$message}}</span>
                     @enderror
                 </div>
 
                 <div class="input-box">
-                    <input type="password" class="input-control" placeholder="Password please" name="password">
+                    <input type="password" class="input-control" required placeholder="Password please" name="password">
                     @error('password')
                     <span class="form-text text-danger">{{$message}}</span>
                     @enderror
