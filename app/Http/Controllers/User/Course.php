@@ -21,3 +21,4 @@ class Course extends Controller
         return view("staff/Home",['courses' => $courses]);
     }
 }
+
