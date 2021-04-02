@@ -34,6 +34,9 @@
                     <a href="forgot_password.php" class="forgot-password">Forgot password?</a>
                 </div><br>
                 <div class="input-box">
+                    <input type="hidden" name="role" value="instructor">
+                </div>
+                <div class="input-box">
                     <input type="submit" class="input-submit" value="LOGIN" name="login">
                 </div>
                 <div class="login-cta"><span>Don't have an account?</span> <a href={{route('signup')}}>Sign up here</a></div>
