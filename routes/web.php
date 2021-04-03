@@ -14,48 +14,42 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('staff/Home');
 });
-
 Route::get('home', function () {
     return view('staff/Home');
 });
 
-Route::group(['namespace'=>'Admin'],function (){
-    Route::get('first', 'AdminController@showString')->middleware('auth');
-});
-
-Route::get('index','Admin\AdminController@showIndex');
-
-Route::resource('news' , 'NewsController');//create controller that have all crud operations
-
 Auth::routes(['verify'=>true]);
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+//Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
-Route::get('getOffers','CrudController@getOffers');
 
 Route::group(['prefix'=>'Registeration'],function(){
-    Route::get('signup','User\UserController@signup')->name('signup');
+
 
     Route::get('login','User\UserController@login')->name('login');
-
-    Route::post('store','User\UserController@save_data')->name('store');
-
+    //Route::get('signup','User\UserController@signup')->name('signup');
 
 });
 
 Route::group(['middleware' => 'loggedin'],function (){
-//    Route::view('course','staff/course');
-    Route::get('/courseView/{courseID}','User\Course@showCourse');
+    Route::view('course','staff/course');
+    //Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
     Route::get('home','User\Course@getEnrolledCourses')->name('home');
+    Route::get('getEnrolledCourses','Teach\TeachController@getEnrolledCourses')->name('getEnrolledCourses');
 });
 
-Route::post('newLec','QrCode\QrCodeController@generateQrCode');
-Route::post('createAccount','User\UserRegistration@signUp')->name("createAccount");
-Route::post('validate','User\UserRegistration@login')->name('validate');
+Route::post('createAccount','User\userRegisteration@signUp')->name("createAccount");
+Route::post('validate','User\userRegisteration@login')->name('validate');
+Route::post('createSession','Session\SessionController@createSession')->name('create_session');
+Route::view('course','staff/course');
+Route::view('signup','Registeration.SignUp')->name('signup');
+Route::view('login','Registeration.Login')->name('login');
+Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
+Route::view('QrCode','staff/QrCode')->name('QrCode');
 
-Route::view('signup','Registeration.SignUp');
+});
 
 
 

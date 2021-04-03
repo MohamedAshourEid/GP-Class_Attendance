@@ -12,9 +12,5 @@ class Teach extends Model
 
     public $timestamps = false;
 
-    public function getInctructorCourses($instructorID){
-        return Teach::query()
-            ->where('instructor_id', '=', "{$instructorID}")
-            ->get();
-    }
+    
 }

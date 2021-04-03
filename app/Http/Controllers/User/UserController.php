@@ -11,14 +11,24 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+
+    protected String $Fname;
+    protected String $Lname;
+    protected String $Id;
+    protected String $email;
+    protected String $password;
     /**
      * Create a new controller instance.
      *
      * @return void
-     */
-    public function __construct()
+*/
+    public function __construct($fname,$lname,$id,$email,$password)
     {
-        //$this->middleware('auth');
+        $this->Fname=$fname;
+        $this->Lname=$lname;
+        $this->Id=$id;
+        $this->email=$email;
+        $this->password=$password;
     }
 
     /**
@@ -26,18 +36,23 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function login()
     {
-        return view('home');
+        return view('Registeration.Login');
     }
     public function signup()
     {
         return view('Registeration.SignUp');
     }
-    public function login()
+    public function logout()
     {
-        return view('Registeration.Login');
+
     }
+    public function editProfile(Request $request)
+    {
+
+    }
+
      //validata sign up data and save in database
     public function save_data(Request $request)
     {

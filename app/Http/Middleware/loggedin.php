@@ -16,7 +16,8 @@ class loggedin
     public function handle($request, Closure $next)
     {
         if (!session()->has('instructorID')) {
-            return redirect('signup');
+
+            return redirect('login');
         }
         return $next($request);
     }

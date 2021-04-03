@@ -12,21 +12,25 @@ use Illuminate\Support\Facades\Validator;
 class validationController extends Controller
 {
     //validate data of login
-    public static function validata_in(Request $request){
-        $validator=Validator::make($request->all(),[
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public static function validata_in(Request $request)
+    {
+        return Validator::make($request->all(),[
             'id'=>'required|numeric|min:6',
             'password'=>'required|alphaNum|min:8'
         ]);
 
-        return $validator;
-
     }
     //validate data of sign up
     public static function validata_up(Request $request){
+
         $validator;
         if($request->role=="instructor")
         {
-            $validator=Validator::make($request->all(),[
+            return $validator=Validator::make($request->all(),[
                 'first_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
                 'last_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
                 'email'=>'required|email', // "/^[^ ]+@[^ ]+\.[a-z]{2,3}$/"
@@ -35,7 +39,7 @@ class validationController extends Controller
 
             ]);
         }
-        $validator=Validator::make($request->all(),[
+        return $validator=Validator::make($request->all(),[
             'first_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
             'last_name'=>'regex:/(^[A-Za-z ]+$)+/|required',
             'email'=>'required|email',
@@ -45,12 +49,11 @@ class validationController extends Controller
         ]);
 
 
-        return $validator;
-
     }
     //check if the user has account or not and return message but this used inside the userController
     public static function checkLogin_data($request)
     {
+
         $userData;
         if($request->role=="instructor"){
             $userData=Instructor::where([['id','=',$request->id]])->first();
@@ -59,7 +62,7 @@ class validationController extends Controller
             $userData=Student::where([['student_id','=',$request->id]])->first();
         }
         if (Hash::check($request->password, $userData->password)) {
-            return redirect('welcome');
+            return redirect('home');
         }
         else{
             return redirect()->back()->with(['error'=>'ID or Password is invalid']);
@@ -68,15 +71,18 @@ class validationController extends Controller
     //check if the user has account or not and return message but this used inside the api
     public static function checkLogin_data_of_api($request)
     {
-        $userData;
+
+        $hashed_password="";
         if($request->role=="instructor"){
             $userData=Instructor::where([['id','=',$request->id]])->first();
+            $hashed_password=$userData->password;
         }
         else{
             $userData=Student::where([['student_id','=',$request->id]])->first();
+            $hashed_password=$userData->password;
 
         }
-        if (Hash::check($request->password, $userData->password)) {
+        if (Hash::check($request->password, $hashed_password)) {
             return ['success'=>'done and login'];
         }
         else{
@@ -86,6 +92,7 @@ class validationController extends Controller
     //insert in databse based on the type of the user student or instructor
     public static function insertInDatabase($request)
     {
+
         if($request->role=="instructor")
         {
             Instructor::create([

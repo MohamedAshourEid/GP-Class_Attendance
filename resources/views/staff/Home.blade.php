@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,8 +18,6 @@
             color: black;
             text-align: center;
             padding: 14px 16px;
-
-
         }
         a:link
         {
@@ -38,7 +37,6 @@
             border:2px solid #3DB2EB;
             color: #3DB2EB;
             text-align: center;
-
         }
         div.div1
         {
@@ -49,8 +47,6 @@
             margin: 20px;
             font-size: 30px;
             color: red;
-
-
         }
 
     </style>
@@ -58,7 +54,6 @@
 <body>
 <div class="container-fluid">
     <div class="navbar-header">
-
         <a class="navbar-brand" href="#">Class-Management</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
@@ -77,7 +72,7 @@
 </div>
 <div class="container text-center">
     <div class="div1">
-        @foreach($courses as $course)
+        @foreach($courses as $course)          
         <div class="row">
             <div class="col-sm-4">
                 <a  type="button" class="btn btn-defult btn-lg" href="/courseView/{{$course->course_id}}">
@@ -104,6 +99,7 @@
 {{--                <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>--}}
 {{--            </div>--}}
 {{--        </div>--}}
+
 
     </div>
 </div>

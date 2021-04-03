@@ -9,7 +9,9 @@
 
             @endif
 
-            <!--<div class='notification'>Logged In Successfull</div>-->
+
+        <!--<div class='notification'>Logged In Successfull</div>-->
+
             @if(Session::has('error'))
                 <div class="alert alert-success" role="alert">
                     {{Session::get('error')}}

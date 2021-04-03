@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 $instr_id;
@@ -7,12 +6,11 @@ if(session()->has('id'))
         $instr_id=session()->get('id');
     }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
 
-    <title>course</title>
+    <title>QR Code Page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -54,7 +52,6 @@ if(session()->has('id'))
             border:2px solid #3DB2EB;
             color: #3DB2EB;
         }
-
     </style>
 </head>
 <body>
@@ -75,21 +72,22 @@ if(session()->has('id'))
 </div>
 
 <div class="container text-center">
-    <div class="row">
+    {{--<div class="row">
         <h1>{{$courseID}}</h1>
-    </div>
+    </div>--}}
 
 
     <div class="row">
-        <button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Create Session</button>
-    </div>
-    <div class="row">
+        <form action="{{route('create_session')}}" method="post">
+            {{@csrf_field()}}
 
-        <button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-check"></span>  Create Quiz</button>
-    </div>
-    <div class="row">
+            <input type="hidden" name='courseID' value={{$courseID}}$> <br>
+            <input type="hidden" name='instructorID' value={{$instr_id}}> <br>
+            <span>Session Name:</span>
+            <input class="s_name" type="text" name='session_name' > <br>
+            <button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Create </button>
+        </form>
 
-        <button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-bullhorn"></span>  Make an announcement</button>
     </div>
 </div>
 
