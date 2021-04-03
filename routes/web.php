@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('staff/Home');
 });
+Route::get('home', function () {
+    return view('staff/Home');
+});
 
 Auth::routes(['verify'=>true]);
 
@@ -33,6 +36,7 @@ Route::group(['prefix'=>'Registeration'],function(){
 Route::group(['middleware' => 'loggedin'],function (){
     Route::view('course','staff/course');
     //Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
+    Route::get('home','User\Course@getEnrolledCourses')->name('home');
     Route::get('getEnrolledCourses','Teach\TeachController@getEnrolledCourses')->name('getEnrolledCourses');
 });
 

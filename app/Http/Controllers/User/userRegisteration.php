@@ -31,7 +31,10 @@ class userRegisteration extends Controller
                 $instrutor->store($id,$Fname,$Lname,$email,$password);
                 return $this->login($request);
             }
-            else {return "user allready exist ";}
+            else {
+                $errors = 'user allready exist';
+                return Redirect()->back()->withErrors($errors);//->withInputs($request->all());
+            }
         }
         else{
             $student = new \App\Models\Student();
@@ -40,7 +43,10 @@ class userRegisteration extends Controller
                 $student->store($id,$Fname,$Lname,$email,$password);
                 return $this->login($request);
             }
-            else {return "user allready exist ";}
+            else {
+                $error = 'user allready exist';
+                return Redirect()->back()->withErrors($error);
+                }
         }
     }
 
@@ -53,19 +59,23 @@ class userRegisteration extends Controller
             $instrutor = new \App\Models\Instructor();
             $result = $instrutor->search_logIn($id,$password);
             if ($result->isEmpty()){
-                return "id or password are wrong";
+                $error = 'id or password are wrong';
+                return Redirect()->back()->withErrors($error);
             }
             else {
-                $request->session()->put('id',$id);
+                /*$request->session()->put('id',$id);
                 $courses = TeachController::getInstructorCourses($id);
-                return view("staff/Home",['courses' => $courses]);
+                return view("staff/Home",['courses' => $courses]);*/
+                session(['instructorID' => $id]);
+                return redirect()->route('home');
             }
         }
         else{
             $student = new \App\Models\Student();
             $result = $student->search_logIn($id,$password);
             if ($result->isEmpty()){
-                return "id or password are wrong";
+                $error = 'id or password are wrong';
+                return Redirect()->back()->withErrors($error);
             }
             else {
                 return view("staff/Home");
