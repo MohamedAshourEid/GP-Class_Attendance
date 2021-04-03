@@ -15,6 +15,7 @@ class Authenticate extends Middleware
     {
         if (!session()->has('instructorID')) {
             return route('signup');
+
         }
     }
 }

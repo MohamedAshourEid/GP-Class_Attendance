@@ -12,6 +12,5 @@ class Teach extends Model
 
     public $timestamps = false;
 
-
-
+    
 }

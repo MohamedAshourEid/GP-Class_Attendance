@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 $instr_id;
@@ -6,11 +7,12 @@ if(session()->has('id'))
         $instr_id=session()->get('id');
     }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
 
-    <title>QR Code Page</title>
+    <title>course</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -52,6 +54,7 @@ if(session()->has('id'))
             border:2px solid #3DB2EB;
             color: #3DB2EB;
         }
+
     </style>
 </head>
 <body>

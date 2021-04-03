@@ -26,6 +26,7 @@
         div.row
         {
             margin: 20px;
+
         }
         button.btn
         {
@@ -47,11 +48,11 @@
             font-size: 30px;
             color: red;
         }
+
     </style>
 </head>
 <body>
 <div class="container-fluid">
-
     <div class="navbar-header">
         <a class="navbar-brand" href="#">Class-Management</a>
     </div>
@@ -71,33 +72,34 @@
 </div>
 <div class="container text-center">
     <div class="div1">
-        @foreach($courses as $course)
-            <div class="row">
-                <div class="col-sm-4">
-                    <a  type="button" class="btn btn-defult btn-lg" href="/courseView/{{$course->course_id}}">
-                        {{$course->course_id}}  </a>
-                </div>
-                <div class="col-sm-4">
-                    <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>
-                </div>
+        @foreach($courses as $course)          
+        <div class="row">
+            <div class="col-sm-4">
+                <a  type="button" class="btn btn-defult btn-lg" href="/courseView/{{$course->course_id}}">
+                    {{$course->course_id}}  </a>
             </div>
+            <div class="col-sm-4">
+                <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>
+            </div>
+        </div>
         @endforeach
-        {{--        <div class="row">--}}
-        {{--            <div class="col-sm-4">--}}
-        {{--                <button type="button" class="btn btn-defult btn-lg" > Course 2 </button>--}}
-        {{--            </div>--}}
-        {{--            <div class="col-sm-4">--}}
-        {{--                <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>--}}
-        {{--            </div>--}}
-        {{--        </div>--}}
-        {{--        <div class="row">--}}
-        {{--            <div class="col-sm-4">--}}
-        {{--                <button type="button" class="btn btn-defult btn-lg" > Course 3 </button>--}}
-        {{--            </div>--}}
-        {{--            <div class="col-sm-4">--}}
-        {{--                <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>--}}
-        {{--            </div>--}}
-        {{--        </div>--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-sm-4">--}}
+{{--                <button type="button" class="btn btn-defult btn-lg" > Course 2 </button>--}}
+{{--            </div>--}}
+{{--            <div class="col-sm-4">--}}
+{{--                <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-sm-4">--}}
+{{--                <button type="button" class="btn btn-defult btn-lg" > Course 3 </button>--}}
+{{--            </div>--}}
+{{--            <div class="col-sm-4">--}}
+{{--                <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+
 
     </div>
 </div>

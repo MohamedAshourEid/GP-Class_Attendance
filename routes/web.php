@@ -49,6 +49,9 @@ Route::view('login','Registeration.Login')->name('login');
 Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
 Route::view('QrCode','staff/QrCode')->name('QrCode');
 
+});
+
+
 
 
 
