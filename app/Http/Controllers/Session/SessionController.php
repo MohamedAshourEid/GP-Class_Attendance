@@ -5,10 +5,14 @@ use App\Models\Session;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\QrCode\QrCodeController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use phpDocumentor\Reflection\Types\This;
 
 class SessionController extends Controller
 {
+    /**
+     * @var
+     */
     protected $ID;
     protected $session_name;
     protected $date;
@@ -23,24 +27,38 @@ class SessionController extends Controller
         $session->ID=$sessionID;
         $session->session_name=$request->session_name;
         $session->date=$date;
-        if($session->saveSession($session,$request)){
+        return self::validateSessionNAmeThenSaveSession($session,$request);
+        /*if($session->saveSession($session)){
             return QrCodeController::showQrCode($request,$sessionID);
         }else{
             return view('staff/QrCode',['error' => 'There error during creating session']);
-        }
+        }*/
 
 
 
     }
-    public function saveSession(SessionController $session,Request $req)
+    public static function validateSessionNAmeThenSaveSession(SessionController $session,Request $request)
     {
-        if(Session::create(
-            ['session_name'=>$session->session_name,
-                'session_id'=>$session->ID,
-                'date'=>$session->date]))
+        $errors;
+        if(strlen($session->session_name)==0)
         {
-            return true;
+            $errors='session name is empty,please try again';
+            return Redirect()->back()->withErrors($errors);
         }
+        elseif(strlen($session->session_name)<5)
+        {
+            $errors='Session name is so short,please enter valid name';
+            return Redirect()->back()->withErrors($errors);
+        }
+        else{
+            Session::create(
+                ['session_name'=>$session->session_name,
+                    'session_id'=>$session->ID,
+                    'date'=>$session->date]);
+
+            return QrCodeController::showQrCode($request,$session->ID);
+        }
+
     }
 
 }

@@ -57,9 +57,9 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
+            <li><a href="{{route('home')}}">Home</a></li>
             <li><a href="#">Profile</a></li>
-            <li><a href="#">Log out</a></li>
+            <li><a href="{{route('flush')}}">Log out</a></li>
         </ul>
         <form class="navbar-form navbar-left" action="/action_page.php">
             <div class="form-group">
@@ -82,22 +82,6 @@
                 </div>
             </div>
         @endforeach
-        {{--        <div class="row">--}}
-        {{--            <div class="col-sm-4">--}}
-        {{--                <button type="button" class="btn btn-defult btn-lg" > Course 2 </button>--}}
-        {{--            </div>--}}
-        {{--            <div class="col-sm-4">--}}
-        {{--                <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>--}}
-        {{--            </div>--}}
-        {{--        </div>--}}
-        {{--        <div class="row">--}}
-        {{--            <div class="col-sm-4">--}}
-        {{--                <button type="button" class="btn btn-defult btn-lg" > Course 3 </button>--}}
-        {{--            </div>--}}
-        {{--            <div class="col-sm-4">--}}
-        {{--                <a href="#"><span class="glyphicon glyphicon-minus-sign"></span> </a>--}}
-        {{--            </div>--}}
-        {{--        </div>--}}
 
     </div>
 </div>

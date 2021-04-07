@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('staff/Home');
+    return view('welcome');
 });
 Route::get('home', function () {
     return view('staff/Home');
@@ -36,7 +36,7 @@ Route::group(['prefix'=>'Registeration'],function(){
 Route::group(['middleware' => 'loggedin'],function (){
     Route::view('course','staff/course');
     //Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
-    Route::get('home','User\Course@getEnrolledCourses')->name('home');
+    Route::get('home','Teach\TeachController@getEnrolledCourses')->name('home');
     Route::get('getEnrolledCourses','Teach\TeachController@getEnrolledCourses')->name('getEnrolledCourses');
 });
 
@@ -48,6 +48,13 @@ Route::view('signup','Registeration.SignUp')->name('signup');
 Route::view('login','Registeration.Login')->name('login');
 Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
 Route::view('QrCode','staff/QrCode')->name('QrCode');
+Route::view('createSession','staff.createSession')->name('createSession');
+
+//logout
+Route::get('/flush', function () {
+    Session::flush();
+    return redirect()->route('login');
+})->name('flush');
 
 
 

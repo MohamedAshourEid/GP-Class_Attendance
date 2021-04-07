@@ -1,9 +1,11 @@
 <?php
 session_start();
 $instr_id;
-if(session()->has('id'))
+$courseID;
+if(session()->has('instructorID') and session()->has('courseID'))
     {
-        $instr_id=session()->get('id');
+        $instr_id=session()->get('instructorID');
+        $courseID=session()->get('courseID');
     }
 ?>
 <!DOCTYPE html>
@@ -52,6 +54,9 @@ if(session()->has('id'))
             border:2px solid #3DB2EB;
             color: #3DB2EB;
         }
+        .error{
+            color:red;
+        }
     </style>
 </head>
 <body>
@@ -63,9 +68,9 @@ if(session()->has('id'))
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
+            <li><a href="{{route('home')}}">Home</a></li>
             <li><a href="#">Profile</a></li>
-            <li><a href="#">Log out</a></li>
+            <li><a href="{{route('flush')}}">Log out</a></li>
         </ul>
 
     </div>
@@ -78,11 +83,16 @@ if(session()->has('id'))
 
 
     <div class="row">
+
         <form action="{{route('create_session')}}" method="post">
             {{@csrf_field()}}
 
-            <input type="hidden" name='courseID' value={{$courseID}}$> <br>
+            <input type="hidden" name='courseID' value={{$courseID}}> <br>
             <input type="hidden" name='instructorID' value={{$instr_id}}> <br>
+            @if(isset($errors))
+                <div class="error">{{$errors}}</div>
+
+            @endif
             <span>Session Name:</span>
             <input class="s_name" type="text" name='session_name' > <br>
             <button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Create </button>

@@ -14,7 +14,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (!session()->has('instructorID')) {
-            return route('signup');
+            return route('login');
         }
     }
 }
