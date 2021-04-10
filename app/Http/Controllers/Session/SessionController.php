@@ -39,7 +39,6 @@ class SessionController extends Controller
     }
     public static function validateSessionNAmeThenSaveSession(SessionController $session,Request $request)
     {
-        $errors;
         if(strlen($session->session_name)==0)
         {
             $errors='session name is empty,please try again';
@@ -59,6 +58,12 @@ class SessionController extends Controller
             return QrCodeController::showQrCode($request,$session->ID);
         }
 
+    }
+    /*Get sessions of particular course fro the instructor*/
+    public static function getSessionsOfCourse($courseID){
+        return json_encode(Session::query()->select('session_name','session_id','date')->where('course_id'
+            ,'=',$courseID)
+            ->get());
     }
 
 }

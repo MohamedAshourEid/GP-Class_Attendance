@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\Session\SessionController;
+use App\Http\Controllers\Attendance\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +49,15 @@ Route::post('createSession','Session\SessionController@createSession')->name('cr
 Route::view('course','staff/course');
 Route::view('signup','Registeration.SignUp')->name('signup');
 Route::view('login','Registeration.Login')->name('login');
-Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
+Route::get('/courseView/{courseID}',[CourseController::class,'showCourse']);
 Route::view('QrCode','staff/QrCode')->name('QrCode');
 Route::view('createSession','staff.createSession')->name('createSession');
-
+//Course\CourseController@showCourse
+//test
+Route::get('getCourses/{studentID}',[CourseController::class,'getEnrolledCourses']);
+Route::get('getSessions/{courseID}',[SessionController::class,'getSessionsOfCourse']);
+Route::get('getAttendance/{sessionID}',[AttendanceController::class,'getAttendanceOfSession']);
+//AttendanceController
 //logout
 Route::get('/flush', function () {
     Session::flush();

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\attendanceController;
+namespace App\Http\Controllers\attendance;
 
 use App\Models\Attendance;
 use Illuminate\Http\Request;
@@ -18,6 +18,14 @@ class AttendanceController extends Controller
         else{
             return json_encode('error');
         }
+    }
+    /*Here i get the attendance of specific session*/
+    public function getAttendanceOfSession($sessionID){
+        return json_encode(Attendance::query()->join('students','students.student_id'
+            ,'=','attendence.student_id')
+            ->select('students.Fname','students.Lname','students.student_id')
+            ->where('attendence.session_id','=',$sessionID)
+            ->get());
     }
 
 

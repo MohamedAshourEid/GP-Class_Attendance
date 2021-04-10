@@ -104,4 +104,15 @@ class CourseController extends Controller
             return false;
         }
     }
+    /*get all courses that student enrolled in it*/
+    public function getEnrolledCourses($studentID)
+    {
+        return json_encode(Enrolled_Courses::query()->join('courses','courses.course_id','=',
+            'enrolled_courses.course_id')
+        ->select('courses.name')->where('enrolled_courses.student_id',
+             '=',"$studentID")->get());
+
+
+
+    }
 }
