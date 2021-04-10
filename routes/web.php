@@ -64,6 +64,9 @@ Route::get('/flush', function () {
     return redirect()->route('login');
 })->name('flush');
 
+});
+
+
 
 
 
