@@ -5,7 +5,7 @@ namespace App\Http\Controllers\QrCode;
 use App\Http\Controllers\Controller;
 use App\Models\Session;
 use Illuminate\Http\Request;
-use App\Http\Controllers\attendanceController\AttendanceController;
+use App\Http\Controllers\attendance\AttendanceController;
 
 class QrCodeController extends Controller
 {

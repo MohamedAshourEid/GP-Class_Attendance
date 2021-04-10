@@ -22,14 +22,14 @@ class UserController extends Controller
      *
      * @return void
 */
-    public function __construct($fname,$lname,$id,$email,$password)
+    /*public function __construct($fname,$lname,$id,$email,$password)
     {
-        $this->Fname=$fname;
-        $this->Lname=$lname;
-        $this->Id=$id;
-        $this->email=$email;
-        $this->password=$password;
-    }
+        //$this->Fname=$fname;
+        //$this->Lname=$lname;
+       // $this->Id=$id;
+       // $this->email=$email;
+       // $this->password=$password;
+    }*/
 
     /**
      * Show the application dashboard.
@@ -46,7 +46,8 @@ class UserController extends Controller
     }
     public function logout()
     {
-
+        Session::flush();
+        return redirect()->route('login');
     }
     public function editProfile(Request $request)
     {

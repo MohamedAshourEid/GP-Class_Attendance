@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 session_start();
 use App\Models\Teach;
+use App\Http\Controllers\Traits\requestTrait;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -32,8 +33,8 @@ class userRegisteration extends Controller
                 return $this->login($request);
             }
             else {
-                $errors = 'user allready exist';
-                return Redirect()->back()->withErrors($errors);//->withInputs($request->all());
+                $error = 'user allready exist';
+                return requestTrait::handeRegisterationRequest($request,$error);
             }
         }
         else{
@@ -45,7 +46,7 @@ class userRegisteration extends Controller
             }
             else {
                 $error = 'user allready exist';
-                return Redirect()->back()->withErrors($error);
+                return requestTrait::handeRegisterationRequest($request,$error);
                 }
         }
     }
@@ -59,14 +60,13 @@ class userRegisteration extends Controller
             $instrutor = new \App\Models\Instructor();
             $result = $instrutor->search_logIn($id,$password);
             if ($result->isEmpty()){
+
                 $error = 'id or password are wrong';
-                return Redirect()->back()->withErrors($error);
+                return requestTrait::handeRegisterationRequest($request,$error);
             }
             else {
-                /*$request->session()->put('id',$id);
-                $courses = TeachController::getInstructorCourses($id);
-                return view("staff/Home",['courses' => $courses]);*/
-                session(['instructorID' => $id]);
+
+                $request->session()->put('instructorID',$id);
                 return redirect()->route('home');
             }
         }
@@ -75,7 +75,7 @@ class userRegisteration extends Controller
             $result = $student->search_logIn($id,$password);
             if ($result->isEmpty()){
                 $error = 'id or password are wrong';
-                return Redirect()->back()->withErrors($error);
+                return requestTrait::handeRegisterationRequest($request,$error);
             }
             else {
                 return view("staff/Home");

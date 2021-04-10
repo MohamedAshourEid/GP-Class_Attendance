@@ -41,14 +41,7 @@
                     <a href="forgot_password.php" class="forgot-password">Forgot password?</a>
                 </div><br>
                 <div class="input-box">
-                    <input type="radio" name="role" value="instructor">
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        instructor
-                    </label>
-                    <input type="radio" name="role" value="student">
-                    <label class="form-check-label">
-                        student
-                    </label>
+                    <input type="hidden" name="role" value="instructor">
 
                 </div>
                 <div class="input-box">

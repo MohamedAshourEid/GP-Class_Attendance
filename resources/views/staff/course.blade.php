@@ -1,11 +1,7 @@
 
 <?php
 session_start();
-$instr_id;
-if(session()->has('id'))
-    {
-        $instr_id=session()->get('id');
-    }
+session(['courseID' => $courseID]);
 ?>
 
 <!DOCTYPE html>
@@ -66,9 +62,9 @@ if(session()->has('id'))
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
+            <li><a href="{{route('home')}}">Home</a></li>
             <li><a href="#">Profile</a></li>
-            <li><a href="#">Log out</a></li>
+            <li><a href="{{route('flush')}}">Log out</a></li>
         </ul>
 
     </div>
@@ -81,7 +77,8 @@ if(session()->has('id'))
 
 
     <div class="row">
-        <button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Create Session</button>
+        <a href={{route('createSession')}}><button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Create Session</button>
+        </a>
     </div>
     <div class="row">
 

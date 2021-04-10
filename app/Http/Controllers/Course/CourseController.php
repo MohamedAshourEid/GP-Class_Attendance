@@ -13,22 +13,35 @@ class CourseController extends Controller
     //
     public function showCourse($id){
         //return $id;
-        return view('staff/createSession',['courseID' => $id]);
+        return view('staff/course',['courseID' => $id]);
 
     }
     public static function createCourse(Request $request){
 
-        if(Course::create(['name'=>$request->name, 'course_id'=>$request->courseID]))
+        //check if the course already existed
+        $result=CourseController::search($request);
+        if($request==true)
         {
-            return requestTrait::handelCourseRequest($request);
+            if(Course::create(['name'=>$request->name, 'course_id'=>$request->courseID]))
+            {
+                $message="Course Created Successfully";
+                return requestTrait::handelCourseRequest($request,$message);
+            }
+            $message='Course Not Created';
+            return requestTrait::handelCourseRequest($request,$message);
+            //return view('staff/createCourse',['error' => 'Course Not Created']);
         }
-        return view('staff/createCourse',['error' => 'Course Not Created']);
+        else{
+            $message='Course arleady exist';
+            return requestTrait::handelCourseRequest($request,$message);
+        }
+
 
     }
     public static function joinCourse(Request $request){
        if($request->role=='instructor')
        {
-           return self::checkIfInstructorIsJoindeCourseAndSaveit($request);
+           return self::checkIfInstructorIsJoinedCourseAndSaveit($request);
 
        }
        else{
@@ -36,7 +49,7 @@ class CourseController extends Controller
        }
     }
 
-    public static function checkIfInstructorIsJoindeCourseAndSaveit(Request $request)
+    public static function checkIfInstructorIsJoinedCourseAndSaveit(Request $request)
     {
             $result=Teach::query()->where('course_id', '=', "{$request->courseID}")
                 ->Where('instructor_id', '=', "{$request->ID}")
@@ -78,5 +91,28 @@ class CourseController extends Controller
             $message='You joined the course';
             return requestTrait::handleJoinCourseRequest($request,$message);
         }
+    }
+    public static function search(Request $request){
+        $result= Course::query()
+            ->where('course_id', '=', "{$request->courseID}")
+            ->Where('name', '=', "{$request->name}")
+            ->get();
+        if($result->isEmpty()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    /*get all courses that student enrolled in it*/
+    public function getEnrolledCourses($studentID)
+    {
+        return json_encode(Enrolled_Courses::query()->join('courses','courses.course_id','=',
+            'enrolled_courses.course_id')
+        ->select('courses.name')->where('enrolled_courses.student_id',
+             '=',"$studentID")->get());
+
+
+
     }
 }

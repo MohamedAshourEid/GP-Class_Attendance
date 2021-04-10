@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\Session\SessionController;
+use App\Http\Controllers\Attendance\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('staff/Home');
+    return view('welcome');
 });
 Route::get('home', function () {
     return view('staff/Home');
@@ -36,7 +39,7 @@ Route::group(['prefix'=>'Registeration'],function(){
 Route::group(['middleware' => 'loggedin'],function (){
     Route::view('course','staff/course');
     //Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
-    Route::get('home','User\Course@getEnrolledCourses')->name('home');
+    Route::get('home','Teach\TeachController@getEnrolledCourses')->name('home');
     Route::get('getEnrolledCourses','Teach\TeachController@getEnrolledCourses')->name('getEnrolledCourses');
 });
 
@@ -46,8 +49,20 @@ Route::post('createSession','Session\SessionController@createSession')->name('cr
 Route::view('course','staff/course');
 Route::view('signup','Registeration.SignUp')->name('signup');
 Route::view('login','Registeration.Login')->name('login');
-Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
+Route::get('/courseView/{courseID}',[CourseController::class,'showCourse']);
 Route::view('QrCode','staff/QrCode')->name('QrCode');
+Route::view('createSession','staff.createSession')->name('createSession');
+//Course\CourseController@showCourse
+//test
+Route::get('getCourses/{studentID}',[CourseController::class,'getEnrolledCourses']);
+Route::get('getSessions/{courseID}',[SessionController::class,'getSessionsOfCourse']);
+Route::get('getAttendance/{sessionID}',[AttendanceController::class,'getAttendanceOfSession']);
+//AttendanceController
+//logout
+Route::get('/flush', function () {
+    Session::flush();
+    return redirect()->route('login');
+})->name('flush');
 
 });
 

@@ -25,15 +25,8 @@
     </style>
 </head>
 <body>
-<<<<<<< HEAD
 <div class="container-fluid text-center">
     <p>Scan this QR Code to attend</p>
-=======
-<div class="visible-print text-center">
-    <h1> Laravel QR Code Generator Example </h1>
-{{--        <h2>{{$item}}</h2><br>--}}
-
->>>>>>> aae8c96c83ee9923b7dc0a97c8c621a3571b2626
 
     {!! QrCode::size(200)->generate($qrContent);!!}
 </div>
