@@ -16,6 +16,8 @@ use App\Http\Controllers\Attendance\AttendanceController;
 |
 */
 
+//Route::get("createquiz","quiz\QuizController@quizCorrection");
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -64,7 +66,6 @@ Route::get('/flush', function () {
     return redirect()->route('login');
 })->name('flush');
 
-});
 
 
 
