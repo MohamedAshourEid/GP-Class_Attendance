@@ -66,6 +66,8 @@ Route::get('/flush', function () {
     return redirect()->route('login');
 })->name('flush');
 
+Route::view('createquiz','staff/quiz');
+Route::post('savequiz','quiz\QuizController@createQuiz')->name('savequiz');
 
 
 
