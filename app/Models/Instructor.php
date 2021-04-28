@@ -32,6 +32,7 @@ class Instructor extends Model
             'Fname'=>$Fname,
             'Lname'=>$Lname,
             'email'=>$email,
+           // 'password'=>Hash::make($request->password
             'password'=>$password
         ]);
     }

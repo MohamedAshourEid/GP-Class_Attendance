@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
 
-    protected String $Fname;
-    protected String $Lname;
-    protected String $Id;
-    protected String $email;
-    protected String $password;
+    //protected String $Fname;
+    //protected String $Lname;
+    //protected String $Id;
+    //protected String $email;
+    //protected String $password;
     /**
      * Create a new controller instance.
      *
@@ -38,11 +38,11 @@ class UserController extends Controller
      */
     public function login()
     {
-        return view('Registeration.Login');
+        return view('Registration.Login');
     }
     public function signup()
     {
-        return view('Registeration.SignUp');
+        return view('Registration.SignUp');
     }
     public function logout()
     {

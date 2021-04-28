@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * Author : Alaa Ibrahim
+ * */
 namespace App\Http\Controllers\Session;
 use App\Models\Session;
 use App\Http\Controllers\Controller;
@@ -17,7 +19,9 @@ class SessionController extends Controller
     protected $session_name;
     protected $date;
 
-
+    /*
+     * This function is used to create session
+     * */
     public static function createSession(Request $request)
     {
         $date = date('Y-m-d H:i:s');
@@ -28,15 +32,10 @@ class SessionController extends Controller
         $session->session_name=$request->session_name;
         $session->date=$date;
         return self::validateSessionNAmeThenSaveSession($session,$request);
-        /*if($session->saveSession($session)){
-            return QrCodeController::showQrCode($request,$sessionID);
-        }else{
-            return view('staff/QrCode',['error' => 'There error during creating session']);
-        }*/
-
-
-
     }
+    /*
+     * here i validate the name and if is valid i create the session
+     * then i call showQrCode function to show the Qr Code to the students*/
     public static function validateSessionNAmeThenSaveSession(SessionController $session,Request $request)
     {
         if(strlen($session->session_name)==0)
@@ -60,9 +59,9 @@ class SessionController extends Controller
 
     }
     /*Get sessions of particular course fro the instructor*/
-    public static function getSessionsOfCourse($courseID){
-        return json_encode(Session::query()->select('session_name','session_id','date')->where('course_id'
-            ,'=',$courseID)
+    public static function getSessionsOfCourse(Request $request){
+        return json_encode(Session::query()->select('session_name','session_id','date')
+            ->where('course_id','=',$request->courseID)
             ->get());
     }
 

@@ -19,10 +19,17 @@ use Illuminate\Support\Facades\Route;
 
 //});
 
-Route::post('signup','User\UserControllerApi@save_data');
-Route::post('login','User\UserControllerApi@validate_login');
+Route::post('signup','User\userRegistration@signup');
+Route::post('login','User\userRegistration@login');
 
 Route::post('attend_lec','ApiAttendance\AttendanceController@attendLecture');
 Route::post('createCourse','Course\CourseController@createCourse');
 Route::post('joinCourse','Course\CourseController@joinCourse');
+Route::post('getCourses','Course\CourseController@getEnrolledCourses');
+Route::post('getSessions','Session\SessionController@getSessionsOfCourse');
+Route::post('getAttendanceOfSession','Attendance\AttendanceController@getAttendanceOfSession');
+Route::post('getAnsence','Attendance\AttendanceController@getNumOfAbsencesInCourse');
+Route::post('getTeachedCourses','Teach\TeachController@getInstructorCoursesApi');
+Route::post('getTopicsOfQuizzes','Quiz\QuizController@getQuizzes');
+Route::post('getQuestionsandAnswersOfQuiz','Quiz\QuizController@getQuestionsandAnswersOfQuiz');
 

@@ -1,4 +1,7 @@
 <?php
+/*
+ * Author : Alaa Ibrahim
+ * */
 namespace App\Http\Controllers\Course;
 session()->start();
 use App\Models\Course;
@@ -10,34 +13,41 @@ use App\Http\Controllers\Traits\requestTrait;
 
 class CourseController extends Controller
 {
-    //
+    /*Created by Mohammed Ashore*/
     public function showCourse($id){
         //return $id;
         return view('staff/course',['courseID' => $id]);
 
     }
+    /*
+     * here i create course where i take the name and id of course to create it
+     * if the course is already exist return message
+     * if it created return success message*/
     public static function createCourse(Request $request){
 
         //check if the course already existed
         $result=CourseController::search($request);
-        if($request==true)
+        if($result==true)
         {
             if(Course::create(['name'=>$request->name, 'course_id'=>$request->courseID]))
             {
                 $message="Course Created Successfully";
-                return requestTrait::handelCourseRequest($request,$message);
+                return requestTrait::handelCreateCourseRequest($request,$message);
             }
             $message='Course Not Created';
-            return requestTrait::handelCourseRequest($request,$message);
+            return requestTrait::handelCreateCourseRequest($request,$message);
             //return view('staff/createCourse',['error' => 'Course Not Created']);
         }
         else{
-            $message='Course arleady exist';
-            return requestTrait::handelCourseRequest($request,$message);
+            $message='Course already exist';
+            return requestTrait::handelCreateCourseRequest($request,$message);
         }
 
 
     }
+    /*
+     * if the instructor or student want to join course
+     * */
     public static function joinCourse(Request $request){
        if($request->role=='instructor')
        {
@@ -48,34 +58,55 @@ class CourseController extends Controller
            return self::checkIfStudentIsJoinedCourseAndSaveit($request);
        }
     }
-
+    /*if the user is instructor
+    first i check if the course is exist or not
+    second i check if is already joined the course and teach it or not then save it
+    */
     public static function checkIfInstructorIsJoinedCourseAndSaveit(Request $request)
     {
-            $result=Teach::query()->where('course_id', '=', "{$request->courseID}")
-                ->Where('instructor_id', '=', "{$request->ID}")
+        if(!CourseController::search($request))
+        {
+            $result=Teach::query()->where('course_id', '=', $request->courseID)
+                ->Where('instructor_id', '=', $request->ID)
                 ->get();
-        if($result->isEmpty())
-        {
-           return self::save_instructor_in_course($request);
+            if($result->isEmpty())
+            {
+                return self::save_instructor_in_course($request);
+            }
+            else{
+                $message='You already joined the course';
+                return requestTrait::handleJoinCourseRequest($request,$message);
+            }
         }
         else{
-            $message='You already joined the course';
+            $message='Course Not Found';
             return requestTrait::handleJoinCourseRequest($request,$message);
         }
+
     }
+    /*if the user is student
+    first i check if the course is exist or not
+    second i check if is already enrolled in the course or not then save it
+    */
     public static function checkIfStudentIsJoinedCourseAndSaveit(Request $request){
-        $result=Enrolled_Courses::query()->where('course_id', '=', "{$request->courseID}")
-            ->Where('student_id', '=', "{$request->ID}")
-            ->get();
-        if($result->isEmpty())
-        {
-            return self::save_student_in_course($request);
+        if(!CourseController::search($request)) {
+            $result = Enrolled_Courses::query()->where('course_id', '=', "{$request->courseID}")
+                ->Where('student_id', '=', "{$request->ID}")
+                ->get();
+            if ($result->isEmpty()) {
+                return self::save_student_in_course($request);
+            } else {
+                $message = 'You already joined the course';
+                return requestTrait::handleJoinCourseRequest($request, $message);
+            }
         }
         else{
-            $message='You already joined the course';
+            $message='Course Not Found';
             return requestTrait::handleJoinCourseRequest($request,$message);
         }
     }
+    /*
+     * save instructor in teaching this course*/
     public static function save_instructor_in_course(Request $request){
         if(Teach::create(['course_id'=>$request->courseID,
             'instructor_id'=>$request->ID]))
@@ -84,6 +115,9 @@ class CourseController extends Controller
             return requestTrait::handleJoinCourseRequest($request,$message);
         }
     }
+    /*
+     *save student in this course
+     */
     public static function save_student_in_course(Request $request){
         if(Enrolled_Courses::create(['course_id'=>$request->courseID,
             'student_id'=>$request->ID]))
@@ -92,6 +126,8 @@ class CourseController extends Controller
             return requestTrait::handleJoinCourseRequest($request,$message);
         }
     }
+    /*
+     * check if the course is found or not*/
     public static function search(Request $request){
         $result= Course::query()
             ->where('course_id', '=', "{$request->courseID}")
@@ -105,12 +141,12 @@ class CourseController extends Controller
         }
     }
     /*get all courses that student enrolled in it*/
-    public function getEnrolledCourses($studentID)
+    public function getEnrolledCourses(Request $request)
     {
         return json_encode(Enrolled_Courses::query()->join('courses','courses.course_id','=',
             'enrolled_courses.course_id')
         ->select('courses.name')->where('enrolled_courses.student_id',
-             '=',"$studentID")->get());
+             '=',"$request->studentID")->get());
 
 
 

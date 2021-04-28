@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers\User;
 session_start();
-use App\Models\Teach;
 use App\Http\Controllers\Traits\requestTrait;
-use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Teach\TeachController;
-use Illuminate\Support\Facades\Redirect;
-class userRegisteration extends Controller
+class userRegistration extends Controller
 {
     /**
      * @param Request $request
@@ -33,8 +28,8 @@ class userRegisteration extends Controller
                 return $this->login($request);
             }
             else {
-                $error = 'user allready exist';
-                return requestTrait::handeRegisterationRequest($request,$error);
+                $error = 'user already exist';
+                return requestTrait::handleRegistrationRequest($request,$error);
             }
         }
         else{
@@ -45,8 +40,8 @@ class userRegisteration extends Controller
                 return $this->login($request);
             }
             else {
-                $error = 'user allready exist';
-                return requestTrait::handeRegisterationRequest($request,$error);
+                $error = 'user already exist';
+                return requestTrait::handleRegistrationRequest($request,$error);
                 }
         }
     }
@@ -62,12 +57,14 @@ class userRegisteration extends Controller
             if ($result->isEmpty()){
 
                 $error = 'id or password are wrong';
-                return requestTrait::handeRegisterationRequest($request,$error);
+                return requestTrait::handleRegistrationRequest($request,$error);
             }
             else {
 
-                $request->session()->put('instructorID',$id);
-                return redirect()->route('home');
+                //$request->session()->put('instructorID',$id);
+                session(['instructorID' => $id]);
+                $success="User logged in successfully";
+                return requestTrait::handleSuccessOfRequest($request,$success);
             }
         }
         else{
@@ -75,10 +72,11 @@ class userRegisteration extends Controller
             $result = $student->search_logIn($id,$password);
             if ($result->isEmpty()){
                 $error = 'id or password are wrong';
-                return requestTrait::handeRegisterationRequest($request,$error);
+                return requestTrait::handleRegistrationRequest($request,$error);
             }
             else {
-                return view("staff/Home");
+                $success="U logged in successfully";
+                return requestTrait::handleSuccessOfRequest($request,$success);
             }
         }
     }

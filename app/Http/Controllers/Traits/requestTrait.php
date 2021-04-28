@@ -1,6 +1,8 @@
 <?php
 
-
+/*
+ * Author : Alaa Ibrahim
+ * */
 namespace App\Http\Controllers\Traits;
 
 
@@ -8,9 +10,11 @@ use Illuminate\Http\Request;
 
 class requestTrait
 {
-      public static function handelCreateCourseRequest(Request $request,$message)
+       /*this function check if the create course request from API or from the web app
+       to return the correct format*/
+      public static function handleCreateCourseRequest(Request $request,$message)
       {
-          if($request->ajax())
+          if($request->wantsJson())
           {
               return json_encode($message);
           }
@@ -18,21 +22,42 @@ class requestTrait
               return view('staff/createCourse',['success' => $message]);
           }
       }
+      /*this function check if the join course request from API or from the web app
+       to return the correct format*/
       public static function handleJoinCourseRequest(Request $request,$message){
-          if($request->ajax())
+          if($request->wantsJson())
           {
               return json_encode($message);
           }else{
               return view('staff/joinCourse',['success' => $message]);
           }
       }
-      public static function handeRegisterationRequest(Request $request,$error){
-          if($request->ajax())
+    /*this function check if the registration request from API or from the web app
+    to return the correct format (deal with error during the registration)*/
+      public static function handleRegistrationRequest(Request $request,$message){
+          if($request->wantsJson())
           {
-              return json_encode($error);
+              return json_encode($message);
           }
           else{
-              return Redirect()->back()->withErrors($error);
+              //return json_encode($message);
+              return Redirect()->back()->withErrors($message);
           }
       }
+      /*this function check if the registration request from API or from the web app
+      to return the correct format .
+      it handle the success messages of the registration
+      */
+      public static function handleSuccessOfRequest(Request $request,$message){
+          if($request->wantsJson())
+          {
+              return json_encode($message);
+              //return $message;
+          }
+          else{
+              return redirect()->route('home');
+          }
+      }
+
+
 }
