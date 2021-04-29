@@ -54,6 +54,9 @@ Route::view('login','Registeration.Login')->name('login');
 Route::get('/courseView/{courseID}',[CourseController::class,'showCourse']);
 Route::view('QrCode','staff/QrCode')->name('QrCode');
 Route::view('createSession','staff.createSession')->name('createSession');
+//Route::get();
+Route::get('/showQuizes/{courseID}','quiz\QuizController@showQuizes')->name('showQuizes');
+Route::get('/showQuiz/{quizID}','quiz\QuizController@showQuize')->name('showQuize');
 //Course\CourseController@showCourse
 //test
 Route::get('getCourses/{studentID}',[CourseController::class,'getEnrolledCourses']);
