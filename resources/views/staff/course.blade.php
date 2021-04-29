@@ -81,8 +81,9 @@ session(['courseID' => $courseID]);
         </a>
     </div>
     <div class="row">
+        <a href={{route('showQuizes',['courseID' => $courseID])}}><button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-check"></span> Quizes</button></a>
 
-        <button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-check"></span>  Create Quiz</button>
+
     </div>
     <div class="row">
 

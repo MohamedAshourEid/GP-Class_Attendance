@@ -8,7 +8,7 @@ class questionOption extends Model
 {
     //
     protected $table = "questionOptions";
-    protected $fillable = ['question_id','id','option'];
+    protected $fillable = ['quiz_id','question_id','options'];
 
     public $timestamps=false;
 }
