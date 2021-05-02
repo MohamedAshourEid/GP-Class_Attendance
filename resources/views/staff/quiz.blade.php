@@ -1,16 +1,13 @@
 
     <html>
     <body>
-
+<h1>{{$courseID}}</h1>
     <fieldset>
         <legend>Legend</legend>
-
-
-
-
-
         <form id="sections" action="{{route('savequiz')}}" method="post">
             {{@csrf_field()}}
+            <input type="text" placeholder="quiz topic" name="quizTopic">
+            <input type="hidden" value="{{$courseID}}" name="courseID">
             <input type="hidden" value="0" id="questionsCount" name="questionsCount">
             <input type="submit" value="save quiz">
         </form>

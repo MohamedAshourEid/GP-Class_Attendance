@@ -4,6 +4,11 @@
 </head>
 <body>
 <h1>hello world</h1>
+<div class="row">
+    <a href={{route('createQuiz',['courseID' => $courseID])}}><button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-check"></span> create quiz</button></a>
+
+
+</div>
 <h1>{{ gettype($quizes) }}</h1>
 @foreach($quizes as $quiz)
     <div class="row">
