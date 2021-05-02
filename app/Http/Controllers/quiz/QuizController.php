@@ -4,9 +4,9 @@ namespace App\Http\Controllers\quiz;
 
 use App\Http\Controllers\Controller;
 use App\Models\grade;
-use App\Models\questionOption;
+use App\Models\choice;
 use App\Models\Quiz;
-use App\Models\quizQuestion;
+use App\Models\Question;
 use App\Models\Student;
 use App\Models\studentAnswers;
 use Illuminate\Http\Request;
@@ -14,43 +14,37 @@ use Illuminate\Http\Request;
 class QuizController extends Controller
 {
     public function createQuiz(Request $request){
-        $quizID = 'q8'; // generate id for this quiz
-        // save quiz
+        $quizID = 'q15'; // generate id for this quiz
+        $courseID = $request->courseID;
+        $topic = $request->quizTopic;
+        $this->saveQuiz($quizID,$courseID,$topic);
 
-        Quiz::create([
-            'id' => $quizID,
-            'courseID' => 'CS150',
-            'topic' => 'quiz topic'
-        ]);
-
-        $questionsCount = $request->questionsCount;
-//        return $request;
+        $questionsCount = $request->questionsCount; // number of questions in this request
         for($i=1; $i<=$questionsCount; $i++) {
-            $questionID = 'question'.$i;
+            $questionID = $quizID.'question'.$i;
             $correctAnswerID = 'correctAnswer'.$i;
             $count = 'optionCount'.$i;
             $questionOptions = $request->$count;
-// q1question1
+
             if ($request->$questionID) {
                 // save question and its correct answer
-                quizQuestion::create([
-                    'id' => $quizID.$questionID,
-                    'quiz_id' => $quizID,
-                    'content' => $request->$questionID,
-                    'answer_id' => $request->$correctAnswerID
-                ]);
+                QuestionController::create($questionID,$quizID,$request->$questionID,$request->$correctAnswerID);
                 // sava question and its options
                 for ($j = 1; $j <= $questionOptions; $j++) {
                     $questionOption = 'question' . $i . 'option' . $j;
                     $questionOptionContent = $request->$questionOption;
-                    questionOption::create([
-                        'question_id' => $quizID . $questionID,
-                        'quiz_id' => $quizID,
-                        'options' => $questionOptionContent
-                    ]);
+                    QuestionController::saveChoice($quizID.$questionID, $quizID, $questionOptionContent);
                 }
             }
         }
+    }
+
+    public function saveQuiz($quizID,$courseID,$topic){
+        Quiz::create([
+            'id' => $quizID,
+            'courseID' => $courseID,
+            'topic' => $topic
+        ]);
     }
 
     public function quizCorrection(Request $request){
@@ -72,7 +66,7 @@ class QuizController extends Controller
     }
 
     public function checkAnswer($question){
-        return quizQuestion::query()
+        return question::query()
             ->where('id', '=', "{$question->question_id}")
             ->Where('answer_id', '=', "{$question->answer_id}")
             ->count();
@@ -80,70 +74,33 @@ class QuizController extends Controller
     }
 
     public function showQuizes($courseID){
-
         $quizes = Quiz::query()
             ->where('courseID' , '=' , "{$courseID}")
             ->get();
-
-
-
-        return view('staff/quizes',[ 'quizes' =>$quizes]);
+        return view('staff/quizes',[ 'quizes' =>$quizes,'courseID'=>$courseID]);
     }
 
     public function showQuize($quizID){
-
-
-
-        $questions = quizQuestion::query()
+        $questions = Question::query()
             ->where('quiz_id', '=', "{$quizID}")
             ->get();
-
-//        return $questions;
-        $options2 = [];
-
-
-
-//            $options = questionOption::query()
-//                ->where('question_id', '=', "{$questions->id}")
-//                ->get();
 
         $allQuestions = [];
         $i = 0;
         foreach ($questions as $question) {
             $questionWithAnswer = [];
-
-            $options = questionOption::query()
+            $options = choice::query()
                 ->where('question_id', '=', "{$question->id}")
                 ->get();
-//            return $options;
-
-            $questionWithAnswer['question'.$i] =$question->content;
-            $questionWithAnswer['correctAnswer'.$i] =$question->answer_id;
-            $j = 0;
+            $questionWithAnswer['question'.substr($question->id,-1)] =$question->content;
+            $questionWithAnswer['correctAnswer'.substr($question->id,-1)] =$question->answer_id;
+            $j = 1;
             foreach ($options as $option){
-
                 $questionWithAnswer['option'.$j++] = $option->options;
-
             }
-//            $questionWithAnswer['optionsCount'.$i] = $j;
-//            return $questionWithAnswer;
+            $questionWithAnswer['optionsCount'.substr($question->id,-1)] = $j;
             $allQuestions[$i++] = $questionWithAnswer;
-
         }
-        $test = Json_encode($allQuestions);
-        $test2 = Json_decode($test,false);
-//        return ( $allQuestions);
-        $test3 = [
-            'key1' => 'value1',
-            'key2' => 'value2'
-        ];
-
-
-//        $request = new Illuminate\Http\Request($allQuestions);
-        $test->toJson();
-
-
-        return view("staff/editQuiz",['questions'=>Json_encode($allQuestions)]);
-
+        return view("staff/editQuiz",['questions'=>$allQuestions, 'quizID'=>$quizID]);
     }
 }
