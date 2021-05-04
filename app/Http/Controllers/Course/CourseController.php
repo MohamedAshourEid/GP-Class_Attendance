@@ -22,6 +22,7 @@ class CourseController extends Controller
         $result=CourseController::search($request);
         if($request==true)
         {
+//            Course::UpdateOrCreate()
             if(Course::create(['name'=>$request->name, 'course_id'=>$request->courseID]))
             {
                 $message="Course Created Successfully";
