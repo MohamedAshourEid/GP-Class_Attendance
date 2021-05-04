@@ -177,6 +177,7 @@
     {{$i = 0}}
 <form id="sections">
 @foreach($questions as $question)
+
     <div>
         <input type="hidden" value="2" id="questionsCount" name="questionsCount">
         <input type="button" value="x" style="width: 26" onclick="removeQuestion(this.parentElement,'{{$question['questionid']}}')">
@@ -189,13 +190,14 @@
         @endfor
         </select>
         @for($j=1; $j<$question['optionsCount']; $j++)
-
-                            <input type="text" value="{{$question['option'.$j]}}">
+             <input type="text" value="{{$question['option'.$j]}}">
         @endfor
-        <input type="button" value="save" onclick="saveQuestion(this.parentElement)">
+        <input type="button" value="save" onclick="saveQuestion()">
     </div>
+
 @endforeach
 </form>
+
 <a id="add-new-section" href="#" onclick="newQuestion()">add question </a><br />
 
 </body>

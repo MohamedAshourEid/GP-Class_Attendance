@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 class QuizController extends Controller
 {
     public function createQuiz(Request $request){
-        $quizID = 'q15'; // generate id for this quiz
+//        return $request;
+        $quizID = 'q27'; // generate id for this quiz
         $courseID = $request->courseID;
         $topic = $request->quizTopic;
         $this->saveQuiz($quizID,$courseID,$topic);
@@ -24,16 +25,19 @@ class QuizController extends Controller
             $questionID = $quizID.'question'.$i;
             $correctAnswerID = 'correctAnswer'.$i;
             $count = 'optionCount'.$i;
+            $content = 'question'.$i;
             $questionOptions = $request->$count;
 
-            if ($request->$questionID) {
+            if ($request->$content) {
                 // save question and its correct answer
-                QuestionController::create($questionID,$quizID,$request->$questionID,$request->$correctAnswerID);
+                QuestionController::create($questionID,$quizID,$request->$content,$request->$correctAnswerID);
                 // sava question and its options
                 for ($j = 1; $j <= $questionOptions; $j++) {
+
                     $questionOption = 'question' . $i . 'option' . $j;
                     $questionOptionContent = $request->$questionOption;
-                    QuestionController::saveChoice($quizID.$questionID, $quizID, $questionOptionContent);
+//                    return QuestionController::saveChoice("123", "123", "123");
+                    QuestionController::saveChoice($questionID, $quizID, $questionOptionContent);
                 }
             }
         }
@@ -84,7 +88,6 @@ class QuizController extends Controller
         $questions = Question::query()
             ->where('quiz_id', '=', "{$quizID}")
             ->get();
-
         $allQuestions = [];
         $i = 0;
         foreach ($questions as $question) {
@@ -102,7 +105,6 @@ class QuizController extends Controller
             $questionWithAnswer['optionsCount'] = $j-1;
             $allQuestions[$i++] = $questionWithAnswer;
         }
-//        return $allQuestions;
         return view("staff/editQuiz",['questions'=>$allQuestions, 'quizID'=>$quizID]);
     }
 }
