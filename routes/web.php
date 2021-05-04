@@ -74,7 +74,7 @@ Route::get('createQuiz/{courseID}',function ($courseID){
     return view('staff/quiz')->with('courseID',$courseID);
 })->name('createQuiz');
 Route::post('savequiz','quiz\QuizController@createQuiz')->name('savequiz');
-Route::get('removeQuestion','quiz\QuestionController@destroy')->name('removeQuestion');
+Route::post('removeQuestion','quiz\QuestionController@destroy')->name('removeQuestion');
 
 
 

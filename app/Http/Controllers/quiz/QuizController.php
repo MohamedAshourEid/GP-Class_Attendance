@@ -92,15 +92,17 @@ class QuizController extends Controller
             $options = choice::query()
                 ->where('question_id', '=', "{$question->id}")
                 ->get();
-            $questionWithAnswer['question'.substr($question->id,-1)] =$question->content;
-            $questionWithAnswer['correctAnswer'.substr($question->id,-1)] =$question->answer_id;
+            $questionWithAnswer['question'] =$question->content;
+            $questionWithAnswer['questionid'] =$question->id;
+            $questionWithAnswer['correctAnswer'] =$question->answer_id;
             $j = 1;
             foreach ($options as $option){
                 $questionWithAnswer['option'.$j++] = $option->options;
             }
-            $questionWithAnswer['optionsCount'.substr($question->id,-1)] = $j;
+            $questionWithAnswer['optionsCount'] = $j-1;
             $allQuestions[$i++] = $questionWithAnswer;
         }
+//        return $allQuestions;
         return view("staff/editQuiz",['questions'=>$allQuestions, 'quizID'=>$quizID]);
     }
 }

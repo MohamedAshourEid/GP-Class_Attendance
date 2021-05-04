@@ -1,40 +1,45 @@
 <html>
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 <script>
 
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
     function removeQuestion(node,questionID) {
-        node.remove();
-
-
-
-        let _url     = `removeQuestion`;
-        let _token   = $('meta[name="csrf-token"]').attr('content');
-
+        // alert(questionID);
         $.ajax({
-            url: _url,
-            type: "get",
-            data: {
-
-                questionID: questionID,
+            url: "{{ route('removeQuestion') }}",
+            type: 'POST',
+            data:{
+                id: questionID
             },
-            success: function(response) {
-                if(response.code == 200) {
-                    alert('success');
-                }
-                else
-                    alert(response.code);
+            success:function(data){
+                // alert(data);
+                node.remove();
             },
-            error: function(response) {
-               alert('error');
-                alert((response.responseJSON.errors.title));
-                alert((response.responseJSON.errors.description));
+            error:function(xhr,status,error){
+                $.each(xhr.responseJSON.errors,function (key,item)
+                    {
+                        alert(item)
+                    }
+                );
+                // alert(data.code);
             }
         });
+
+
+
+
+
     }
 
     var saveQuestion = function (node){
@@ -174,16 +179,16 @@
 @foreach($questions as $question)
     <div>
         <input type="hidden" value="2" id="questionsCount" name="questionsCount">
-        <input type="button" value="x" style="width: 26" onclick="removeQuestion(this.parentElement,'q8question1')">
-        <input type="text" value="{{$question['question'.++$i]}}">
+        <input type="button" value="x" style="width: 26" onclick="removeQuestion(this.parentElement,'{{$question['questionid']}}')">
+        <input type="text" value="{{$question['question']}}">
         <select>
-            <option value="{{$question['correctAnswer'.$i]}}"> {{$question['correctAnswer'.$i]}} </option>
-        @for($j=1; $j<$question['optionsCount'.$i]; $j++)
+            <option value="{{$question['correctAnswer']}}"> {{$question['correctAnswer']}} </option>
+        @for($j=1; $j<$question['optionsCount']; $j++)
 
                 <option value="{{$question['option'.$j]}}"> {{$question['option'.$j]}} </option>
         @endfor
         </select>
-        @for($j=1; $j<$question['optionsCount'.$i]; $j++)
+        @for($j=1; $j<$question['optionsCount']; $j++)
 
                             <input type="text" value="{{$question['option'.$j]}}">
         @endfor
