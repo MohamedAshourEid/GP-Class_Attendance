@@ -24,18 +24,19 @@ class QuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public static function create($id,$quizID,$questionID,$correctAnswer)
+    public static function create($id,$quizID,$content,$correctAnswer)
     {
         //
         Question::create([
             'id' => $id,
             'quiz_id' => $quizID,
-            'content' => $questionID,
+            'content' => $content,
             'answer_id' => $correctAnswer
         ]);
     }
 
     public static function saveChoice($questionID,$quizID,$choice){
+//
         choice::create([
             'question_id' =>$questionID,
             'quiz_id' => $quizID,
