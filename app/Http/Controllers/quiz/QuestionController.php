@@ -24,24 +24,68 @@ class QuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public static function create($id,$quizID,$content,$correctAnswer)
-    {
-        //
-        Question::create([
-            'id' => $id,
+    public static function saveQuestion($quizID,$questionID,$correctAnswer){
+        $questionID = Question::insertGetId([
             'quiz_id' => $quizID,
-            'content' => $content,
+            'content' => $questionID,
             'answer_id' => $correctAnswer
         ]);
+        return $questionID;
+
+    }
+
+    public static function saveQuestions(Request $request){
+        $quizID = $request->quizID;
+        $questionsCount = $request->questionsCount; // number of questions in this request
+        for($i=1; $i<=$questionsCount; $i++) {
+            $correctAnswer = 'correctAnswer'.$i;
+            $count = 'optionCount'.$i;
+            $content = 'question'.$i;
+            $questionOptions = $request->$count;
+
+            if ($request->$content) {
+                // save question and its correct answer
+                $questionID = QuestionController::saveQuestion($quizID,$request->$content,$request->$correctAnswer);
+                // sava question and its options
+                for ($j = 1; $j <= $questionOptions; $j++) {
+                    $questionOption = 'question' . $i . 'option' . $j;
+                    $questionOptionContent = $request->$questionOption;
+                    QuestionController::saveChoice($questionID, $quizID, $questionOptionContent);
+                }
+            }
+        }
     }
 
     public static function saveChoice($questionID,$quizID,$choice){
-//
         choice::create([
             'question_id' =>$questionID,
             'quiz_id' => $quizID,
             'options' => $choice
         ]);
+    }
+
+    public function update(Request $request)
+    {
+        $question= Question::findOrFail($request->id);
+        $question-> content =$request['content'];
+        $question-> answer_id =$request['correctAnswer'];
+        $question->save();
+
+        $arr=$request->choices;
+        $choices= choice::query()
+            ->where('question_id', '=', "{$request->id}")
+            ->get();
+
+        for  ($i=0;$i<sizeof($arr);$i++) {
+            choice::where('option_id', '=',$choices[$i]->option_id)
+                ->update(array('options' => $arr[$i]));
+        }
+    }
+
+    public function destroy(Request $request){
+        Question::destroy($request->id);
+        choice::where('question_id','=',"{$request->id}")
+            ->delete();
     }
 
     /**
@@ -84,10 +128,7 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -95,10 +136,5 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
-    {
-        //
-//        return $request;
-        Question::destroy($request->id);
-    }
+
 }

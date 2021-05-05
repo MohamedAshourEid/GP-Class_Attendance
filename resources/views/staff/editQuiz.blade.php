@@ -1,8 +1,8 @@
 <html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -15,6 +15,7 @@
     });
 
     function removeQuestion(node,questionID) {
+        // alert(questionID);
         // alert(questionID);
         $.ajax({
             url: "{{ route('removeQuestion') }}",
@@ -35,17 +36,39 @@
                 // alert(data.code);
             }
         });
-
-
-
-
-
     }
 
-    var saveQuestion = function (node){
-        console.log(node);
+    var saveQuestion = function (form){
+        var count=form["choices"].length
+        var choices=[]
+        for(let i=0;i<count;i++){
+            choices[i] =form["choices"][i].value;
+        }
+        $.ajax({
+            url: "{{ route('updateQuestion') }}",
+            type: 'POST',
+            datatype:"json",
+            data:{
+                id: form["questionID"].value,
+                content:form["content"].value
+                ,correctAnswer:form["correct_answer"].value
 
-    }
+                ,choices:choices
+
+
+            },
+            success:function(data){
+                alert(data);
+            },
+            error:function(xhr,status,error){
+                $.each(xhr.responseJSON.errors,function (key,item)
+                    {
+                        alert(item)
+                    }
+                );
+                // alert(data.code);
+            }
+        });    }
 
     /*
     to create new question you need to
@@ -120,7 +143,7 @@
         var br4 = document.createElement('br');
         section.appendChild(br4);
 
-        document.getElementById('sections').appendChild(section);
+        document.getElementById('newQuestions').appendChild(section);
         newOption(question.id,options,correctAnswer,optionCount);
         newOption(question.id,options,correctAnswer,optionCount)
 
@@ -174,30 +197,38 @@
 </script>
 <h1>hello</h1>
 
-    {{$i = 0}}
-<form id="sections">
+{{$i = 0}}
 @foreach($questions as $question)
+    <form id="sections" onsubmit="saveQuestion(this)">
 
-    <div>
-        <input type="hidden" value="2" id="questionsCount" name="questionsCount">
-        <input type="button" value="x" style="width: 26" onclick="removeQuestion(this.parentElement,'{{$question['questionid']}}')">
-        <input type="text" value="{{$question['question']}}">
-        <select>
-            <option value="{{$question['correctAnswer']}}"> {{$question['correctAnswer']}} </option>
-        @for($j=1; $j<$question['optionsCount']; $j++)
+        <div>
+            <input type="button" value="x" style="width: 26" onclick="removeQuestion(this.parentElement,'{{$question['questionid']}}')">
+            <input type="hidden" value="{{$question['questionid']}}"  name="questionID">
+            <input type="text" value="{{$question['question']}}" name="content">
+            <select name="correct_answer">
+                <option value="{{$question['correctAnswer']}}" > {{$question['correctAnswer']}} </option>
+                @for($j=1; $j<=$question['optionsCount']; $j++)
 
-                <option value="{{$question['option'.$j]}}"> {{$question['option'.$j]}} </option>
-        @endfor
-        </select>
-        @for($j=1; $j<$question['optionsCount']; $j++)
-             <input type="text" value="{{$question['option'.$j]}}">
-        @endfor
-        <input type="button" value="save" onclick="saveQuestion()">
-    </div>
+                    <option value="{{$question['option'.$j]}}"> {{$question['option'.$j]}} </option>
+                @endfor
+            </select>
+            @for($j=1; $j<=$question['optionsCount']; $j++)
+                <input type="text" value="{{$question['option'.$j]}}" name="choices">
+            @endfor
+            <input type="submit" value="save" >
+        </div>
+    </form>
 
 @endforeach
-</form>
+<form  action="{{route('saveNewQuestions')}}" method="post">
+    {{@csrf_field()}}
+    <div id="newQuestions">
+    <input type="hidden" value="{{$quizID}}" name="quizID">
+    <input type="hidden" value="0" id="questionsCount" name="questionsCount">
+    </div>
+    <input type="submit" value="finish">
 
+</form>
 <a id="add-new-section" href="#" onclick="newQuestion()">add question </a><br />
 
 </body>
