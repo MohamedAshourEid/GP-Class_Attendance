@@ -14,7 +14,7 @@ class TeachController extends Controller
         $courses = TeachController::getInstructorCourses($instructorID);
         //echo $courses;
         //return $instructorID;
-        return view("staff/Home",['courses' => $courses]);
+        return view("staff/Courses",['courses' => $courses]);
     }
     /*get all courses that instructor teach it*/
     public static function getInstructorCourses($instructorID){
@@ -32,5 +32,16 @@ class TeachController extends Controller
             'teach.course_id')
             ->select('courses.name','courses.course_id')->where('teach.instructor_id',
                 '=',$request->instructorID)->get());
+    }
+    public function deleteInstructorCourse(Request $request)
+    {
+        if(Teach::query()->where('course_id','=',$request->courseID)
+            ->where('instructor_id','=',$request->instructorID)
+            ->delete())
+        {
+            //$message="Course Deleted Successfully";
+            $courses=self::getInstructorCourses($request->instructorID);
+            return view('staff/Courses',['courses' => $courses]);
+        }
     }
 }

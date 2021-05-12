@@ -77,11 +77,6 @@ if(session()->has('instructorID') and session()->has('courseID'))
 </div>
 
 <div class="container text-center">
-    {{--<div class="row">
-        <h1>{{$courseID}}</h1>
-    </div>--}}
-
-
     <div class="row">
 
         <form action="{{route('create_session')}}" method="post">

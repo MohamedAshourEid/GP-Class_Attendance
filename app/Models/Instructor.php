@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Http\Request;
 class Instructor extends Model
 {
     protected $table = "instructors";
@@ -32,12 +32,7 @@ class Instructor extends Model
             'Fname'=>$Fname,
             'Lname'=>$Lname,
             'email'=>$email,
-           // 'password'=>Hash::make($request->password
             'password'=>$password
         ]);
-    }
-
-    public function getJoinedCourses(){
-
     }
 }

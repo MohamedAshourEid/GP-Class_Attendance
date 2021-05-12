@@ -31,16 +31,20 @@ class CourseController extends Controller
         {
             if(Course::create(['name'=>$request->name, 'course_id'=>$request->courseID]))
             {
-                $message="Course Created Successfully";
-                return requestTrait::handelCreateCourseRequest($request,$message);
+                if(self::save_instructor_in_course($request))
+                {
+                    $message="Course Created and you joined it";
+                    return requestTrait::handleCreateCourseRequest($request,$message);
+                }
+
             }
             $message='Course Not Created';
-            return requestTrait::handelCreateCourseRequest($request,$message);
+            return requestTrait::handleCreateCourseRequest($request,$message);
             //return view('staff/createCourse',['error' => 'Course Not Created']);
         }
         else{
             $message='Course already exist';
-            return requestTrait::handelCreateCourseRequest($request,$message);
+            return requestTrait::handleCreateCourseRequest($request,$message);
         }
 
 
@@ -71,7 +75,11 @@ class CourseController extends Controller
                 ->get();
             if($result->isEmpty())
             {
-                return self::save_instructor_in_course($request);
+                if(self::save_instructor_in_course($request))
+                {
+                    $message='You joined the course successfully';
+                    return requestTrait::handleJoinCourseRequest($request,$message);
+                }
             }
             else{
                 $message='You already joined the course';
@@ -79,8 +87,8 @@ class CourseController extends Controller
             }
         }
         else{
-            $message='Course Not Found';
-            return requestTrait::handleJoinCourseRequest($request,$message);
+            $error='Course Not Found';
+            return requestTrait::handleJoinCourseRequest($request,$error);
         }
 
     }
@@ -94,7 +102,12 @@ class CourseController extends Controller
                 ->Where('student_id', '=', "{$request->ID}")
                 ->get();
             if ($result->isEmpty()) {
-                return self::save_student_in_course($request);
+                if(self::save_student_in_course($request))
+                {
+                    $message='You joined the course';
+                    return requestTrait::handleJoinCourseRequest($request,$message);
+                }
+
             } else {
                 $message = 'You already joined the course';
                 return requestTrait::handleJoinCourseRequest($request, $message);
@@ -111,8 +124,7 @@ class CourseController extends Controller
         if(Teach::create(['course_id'=>$request->courseID,
             'instructor_id'=>$request->ID]))
         {
-            $message='You joined the course';
-            return requestTrait::handleJoinCourseRequest($request,$message);
+            return true;
         }
     }
     /*
@@ -131,7 +143,6 @@ class CourseController extends Controller
     public static function search(Request $request){
         $result= Course::query()
             ->where('course_id', '=', "{$request->courseID}")
-            ->Where('name', '=', "{$request->name}")
             ->get();
         if($result->isEmpty()){
             return true;
@@ -147,8 +158,15 @@ class CourseController extends Controller
             'enrolled_courses.course_id')
         ->select('courses.name')->where('enrolled_courses.student_id',
              '=',"$request->studentID")->get());
-
-
-
+    }
+    public static function deleteCourse(Request $request)
+    {
+        if(Course::query()->where('course_id','=',$request->courseID)->delete())
+        {
+            if(Teach::query()->where('course_id','=',$request->courseID)->delete())
+            {
+                return view('staff/Courses');
+            }
+        }
     }
 }

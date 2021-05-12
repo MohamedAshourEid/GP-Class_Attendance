@@ -46,7 +46,10 @@ Route::group(['middleware' => 'loggedin'],function (){
 
 Route::post('createAccount','User\userRegistration@signUp')->name("createAccount");
 Route::post('validate','User\userRegistration@login')->name('validate');
+Route::get('getData','K_Means\KmeansController@readData');
+Route::get('generate','Grade\GradeController@generate');
 Route::post('createSession','Session\SessionController@createSession')->name('create_session');
+Route::post('get_session','Session\SessionController@getSessionsOfCourse')->name('get_sessions');
 Route::view('course','staff/course');
 Route::view('signup','Registration.SignUp')->name('signup');
 Route::view('login','Registration.Login')->name('login');
@@ -58,15 +61,31 @@ Route::post('saveQuestion','Question\QuestionController@createQuestion')->name('
 Route::view('createQuiz','Quiz.createQuiz')->name('createQuiz');
 Route::view('addQuestion','Quiz.addQuestion')->name('addQuestion');
 Route::view('addAnswer','Quiz.addAnswer')->name('addAnswer');
+Route::get('/showQuizes/{courseID}','quiz\QuizController@showQuizes')->name('showQuizes');
+Route::get('/showQuiz/{quizID}','quiz\QuizController@showQuiz')->name('showQuiz');
+Route::view('createquiz','staff/quiz')->name('createquiz');
+Route::post('savequiz','quiz\QuizController@createQuiz')->name('savequiz');
+
+
+Route::view('sessions','staff.sessions')->name('sessions');
+Route::view('newSession','staff.createNewSession')->name('newSession');
 
 Route::get('/courseView/{courseID}',[CourseController::class,'showCourse']);
 Route::view('QrCode','staff/QrCode')->name('QrCode');
 Route::view('createSession','staff.createSession')->name('createSession');
+
+Route::view('courses','staff.Courses')->name('courses');
+Route::view('create_course','staff.createCourse')->name('create_course');
+Route::post('addCourse','Course\CourseController@createCourse')->name('addCourse');
+Route::view('join_course','staff/joinCourse')->name('join_course');
+Route::post('joinCourse','Course\CourseController@joinCourse')->name('joinCourse');
+Route::post('delete_course','Course\CourseController@deleteCourse')->name('delete_course');
+Route::post('delete_instructor_course','Teach\TeachController@deleteInstructorCourse')->name('delete_instructor_course');
 //Course\CourseController@showCourse
 //test
 Route::get('getCourses/{studentID}',[CourseController::class,'getEnrolledCourses']);
 Route::get('getSessions/{courseID}',[SessionController::class,'getSessionsOfCourse']);
-Route::get('getAttendance/{sessionID}',[AttendanceController::class,'getAttendanceOfSession']);
+Route::get('getAttendance}',[AttendanceController::class,'getAttendanceOfSession'])->name('getAttendance');
 Route::get('getNumOfAbsents/{courseID}',[AttendanceController::class,'getNumOfAbsencesInCourse']);
 Route::get('deleteQuiz/{CourseID}',[QuizController::class,'deleteQuiz']);
 //AttendanceController
@@ -75,6 +94,13 @@ Route::get('/flush', function () {
     Session::flush();
     return redirect()->route('login');
 })->name('flush');
+
+Route::view('/createquiz/{courseID}','staff/quiz');
+Route::get('createQuiz/{courseID}',function ($courseID){
+    return view('staff/quiz')->with('courseID',$courseID);
+})->name('createQuiz');
+Route::post('savequiz','quiz\QuizController@createQuiz')->name('savequiz');
+Route::get('removeQuestion','quiz\QuestionController@destroy')->name('removeQuestion');
 
 
 

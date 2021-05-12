@@ -30,12 +30,17 @@ class AttendanceController extends Controller
      * Here i get the attendance of specific session
      * take the session id and return the id and name for each student */
     public function getAttendanceOfSession(Request $request){
-        return json_encode(Attendance::query()->join('students','students.student_id'
+        $attendances=Attendance::query()->join('students','students.student_id'
             ,'=','attendence.student_id')
             ->select('students.Fname','students.Lname','students.student_id')
             ->where('attendence.session_id','=',$request->sessionID)
             ->where('attendence.course_id','=',$request->courseID)
-            ->get());
+            ->get();
+        if($request->wantsJson())
+            return json_encode($attendances);
+        else{
+            return view('staff/attendanceOfSession',['attendances'=>$attendances]);
+        }
     }
     /*Here to get tha number of times of absence of student in course
     i get number of sessions in this course then number of attendance of the student

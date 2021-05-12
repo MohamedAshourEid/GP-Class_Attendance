@@ -75,16 +75,25 @@ session(['courseID' => $courseID]);
 
 
     <div class="row">
-        <a href={{route('createSession')}}><button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Create Session</button>
+        {{--<a href={{route('sessions')}}><button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Sessions</button>
+        </a>--}}
+            <form action="{{route('get_sessions')}}" method="post">
+                {{@csrf_field()}}
+                <input type="hidden" name='courseID' value={{$courseID}}> <br>
+                <button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Sessions</button>
+
+            </form>
+
+    </div>
+    <div class="row">
+
+        <a href={{route('showQuizes',['courseID' => $courseID])}}><button type="submit" class="btn btn-defult btn-lg" >
+         <span class="glyphicon glyphicon-check"></span>Quizzes</button></a>
+    </div>
+    <div class="row">
+
+        <a href={{route('showQuizes',['courseID' => $courseID])}}><button type="submit" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-bullhorn"></span>  Make an announcement</button>
         </a>
-    </div>
-    <div class="row">
-
-        <button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-check"></span>  Create Quiz</button>
-    </div>
-    <div class="row">
-
-        <button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-bullhorn"></span>  Make an announcement</button>
     </div>
 </div>
 
