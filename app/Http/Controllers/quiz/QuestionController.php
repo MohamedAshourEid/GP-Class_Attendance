@@ -66,25 +66,39 @@ class QuestionController extends Controller
 
     public function update(Request $request)
     {
+//        return $request;
         $question= Question::findOrFail($request->id);
         $question-> content =$request['content'];
         $question-> answer_id =$request['correctAnswer'];
         $question->save();
 
-        $arr=$request->choices;
-        $choices= choice::query()
-            ->where('question_id', '=', "{$request->id}")
-            ->get();
-
-        for  ($i=0;$i<sizeof($arr);$i++) {
-            choice::where('option_id', '=',$choices[$i]->option_id)
-                ->update(array('options' => $arr[$i]));
+        choice::where('question_id','=',"{$request->id}")
+            ->delete();
+        $newChoices = $request->choices;
+        for($i=0; $i<sizeof($newChoices); $i++){
+            QuestionController::saveChoice($request->id, $request->quizID, $newChoices[$i]);
         }
+
+//        $arr=$request->choices;
+//        $choices= choice::query()
+//            ->where('question_id', '=', "{$request->id}")
+//            ->get();
+//
+//        for  ($i=0;$i<sizeof($choices);$i++) {
+//            choice::where('option_id', '=',$choices[$i]->option_id)
+//                ->update(array('options' => $arr[$i]));
+//        }
     }
 
     public function destroy(Request $request){
         Question::destroy($request->id);
         choice::where('question_id','=',"{$request->id}")
+            ->delete();
+    }
+
+    public function removeChoice(Request $request){
+//        return $request->id;
+        choice::where('option_id','=',"{$request->id}")
             ->delete();
     }
 

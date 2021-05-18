@@ -77,5 +77,8 @@ Route::post('savequiz','quiz\QuizController@createQuiz')->name('savequiz');
 Route::post('saveNewQuestions','quiz\QuestionController@saveQuestions')->name('saveNewQuestions');
 
 Route::post('removeQuestion','quiz\QuestionController@destroy')->name('removeQuestion');
+Route::post('removeChoice','quiz\QuestionController@removeChoice')->name('removeChoice');
 
 Route::post('updatequestion', 'quiz\QuestionController@update')->name('updateQuestion');
+
+Route::get('getData','K_Means\KmeansController@readData');
