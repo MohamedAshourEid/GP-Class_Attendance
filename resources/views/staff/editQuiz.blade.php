@@ -7,12 +7,16 @@
 </head>
 <body>
 <script>
-
     $.ajaxSetup({
         headers:{
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function updateChoice(choiceID,newValue){
+        document.getElementById(choiceID).innerHTML = newValue;
+        document.getElementById(choiceID).value = newValue;
+    }
 
     function removeQuestion(node,questionID) {
         // alert(questionID);
@@ -50,107 +54,26 @@
             datatype:"json",
             data:{
                 id: form["questionID"].value,
-                content:form["content"].value
-                ,correctAnswer:form["correct_answer"].value
-
-                ,choices:choices
-
-
+                content:form["content"].value,
+                correctAnswer:form["correct_answer"].value,
+                choices:choices,
+                quizID:{{$quizID}}
             },
             success:function(data){
                 alert(data);
+                console.log(data);
             },
-            error:function(xhr,status,error){
-                $.each(xhr.responseJSON.errors,function (key,item)
-                    {
-                        alert(item)
-                    }
-                );
-                // alert(data.code);
-            }
-        });    }
+            // error:function(xhr,status,error){
+            //     $.each(xhr.responseJSON.errors,function (key,item)
+            //         {
+            //             alert(item)
+            //         }
+            //     );
+            // }
+        });
+    }
 
-    /*
-    to create new question you need to
-    1- create div to contain the question section
-    2- add to this div the following elements
-           I- input element contain the question body
-           II-
-    */
-
-
-
-    var newQuestion = function() {
-
-        questionsCount = document.getElementById('questionsCount')
-        var section = document.createElement('div');
-
-        // 1- add close button
-        var close = document.createElement('input');
-        close.type = 'button';
-        close.value = 'x';
-        close.style.width = '26px';
-        close.onclick = function() {
-            var parent = this.parentNode;
-            parent.parentNode.removeChild(parent);
-        };
-        section.appendChild(close);
-
-
-        // create question id and increment value of questions count
-        var questionID = parseInt(questionsCount.value);
-        questionID +=1;
-        questionsCount.value = questionID;
-
-        var optionCount = document.createElement('input');
-        optionCount.type = 'hidden';
-        optionCount.id = 'optionCount' + questionID;
-        optionCount.name = 'optionCount' + questionID;
-        optionCount.value = 0;
-
-
-        var question = document.createElement('input');
-        question.type = 'text';
-        // generate name & id
-        question.name = 'question'+questionID;
-        question.id = 'question'+questionID;
-        question.placeholder = 'question body';
-        section.appendChild(question);
-        var br = document.createElement('br');
-        section.appendChild(br);
-
-        var options = document.createElement('div');
-        section.appendChild(options);
-
-        options.appendChild(optionCount);
-
-        var correctAnswer = document.createElement('select');
-        correctAnswer.name = 'correctAnswer'+questionID;
-        options.appendChild(correctAnswer);
-
-        var addNewOption = document.createElement('a');
-        addNewOption.innerHTML = 'add new option';
-        addNewOption.href = '#';
-        addNewOption.id = 'add-new-option';
-        addNewOption.onclick = function(){
-            newOption(question.id,options,correctAnswer,optionCount)
-            console.log(question.id);
-
-        }
-        options.appendChild(addNewOption);
-
-
-        var br4 = document.createElement('br');
-        section.appendChild(br4);
-
-        document.getElementById('newQuestions').appendChild(section);
-        newOption(question.id,options,correctAnswer,optionCount);
-        newOption(question.id,options,correctAnswer,optionCount)
-
-
-    };
-
-    var newOption = function(questionID,where, correctAnswerList,optionCountID) {
+    var newOption2 = function(questionID,where, correctAnswerList,optionCountID) {
 
         console.log(optionCountID.value);
 
@@ -190,41 +113,147 @@
 
     };
 
-    // document.getElementById('add-new-section').onclick = newQuestion;
+    var newQuestion = function() {
+        questionsCount = document.getElementById('questionsCount')
+        var section = document.createElement('div');
+        // 1- add close button
+        var close = document.createElement('input');
+        close.type = 'button';
+        close.value = 'x';
+        close.style.width = '26px';
+        close.onclick = function() {
+            var parent = this.parentNode;
+            parent.parentNode.removeChild(parent);
+        };
+        section.appendChild(close);
+        // create question id and increment value of questions count
+        var questionID = parseInt(questionsCount.value);
+        questionID +=1;
+        questionsCount.value = questionID;
+        var optionCount = document.createElement('input');
+        optionCount.type = 'hidden';
+        optionCount.id = 'optionCount' + questionID;
+        optionCount.name = 'optionCount' + questionID;
+        optionCount.value = 0;
+        var question = document.createElement('input');
+        question.type = 'text';
+        // generate name & id
+        question.name = 'question'+questionID;
+        question.id = 'question'+questionID;
+        question.placeholder = 'question body';
+        section.appendChild(question);
+        var br = document.createElement('br');
+        section.appendChild(br);
+        var options = document.createElement('div');
+        section.appendChild(options);
+        options.appendChild(optionCount);
+        var correctAnswer = document.createElement('select');
+        correctAnswer.name = 'correctAnswer'+questionID;
+        options.appendChild(correctAnswer);
+        var addNewOption = document.createElement('a');
+        addNewOption.innerHTML = 'add new option';
+        addNewOption.href = '#';
+        addNewOption.id = 'add-new-option';
+        addNewOption.onclick = function(){
+            newOption2(question.id,options,correctAnswer,optionCount)
+            console.log(question.id);
+        }
+        options.appendChild(addNewOption);
+        var br4 = document.createElement('br');
+        section.appendChild(br4);
+        document.getElementById('newQuestions').appendChild(section);
+        newOption2(question.id,options,correctAnswer,optionCount);
+        newOption2(question.id,options,correctAnswer,optionCount)
+    };
 
-    // newQuestion();
+    var newOption = function(question) {
+        var questionID = question['questionID'].value;
+        var questionOption = document.createElement('input');
+        questionOption.type = 'text';
 
+        var newOptionID =   parseInt(question['optionCount'].value);
+        document.getElementById(questionID+'options').value = ++newOptionID;
+        questionOption.name = 'choices';
+        questionOption.placeholder = 'option content';
+        questionOption.id = newOptionID;
+        questionOption.onchange = function(){
+            console.log( document.getElementById(questionOption.id))
+            document.getElementById('C'+newOptionID).innerHTML = questionOption.value;
+            document.getElementById('C'+newOptionID).value = questionOption.value;
+
+        }
+
+        var location = document.getElementById(question['questionID'].value)
+        // alert("location " + location)
+        location.appendChild(questionOption);
+        var option = document.createElement('option');
+        option.value = questionOption.value;
+        option.id = 'C'+newOptionID;
+        option.name = 'C'+newOptionID;
+        option.innerHTML = questionOption.value;
+        question['correct_answer'].appendChild(option);
+        var br2 = document.createElement('br');
+        location.appendChild(br2);
+
+    };
+
+    var removeChoice = function (node,choiceID){
+        $.ajax({
+            url: "{{ route('removeChoice') }}",
+            type: 'POST',
+            data:{
+                id: choiceID
+            },
+            success:function(data){
+
+                node.remove();
+            },
+            error:function(xhr,status,error){
+                $.each(xhr.responseJSON.errors,function (key,item)
+                    {
+                        alert(item)
+                    }
+                );
+                // alert(data.code);
+            }
+        });
+    }
 </script>
 <h1>hello</h1>
-
-{{$i = 0}}
 @foreach($questions as $question)
-    <form id="sections" onsubmit="saveQuestion(this)">
+    <form id="sections" onchange="saveQuestion(this)">
 
-        <div>
+        <div id="{{$question['questionid']}}" name="options">
             <input type="button" value="x" style="width: 26" onclick="removeQuestion(this.parentElement,'{{$question['questionid']}}')">
             <input type="hidden" value="{{$question['questionid']}}"  name="questionID">
+            <input type="hidden" value="{{$question['optionsCount']}}" id="{{$question['questionid']}}options" name="optionCount">
             <input type="text" value="{{$question['question']}}" name="content">
+            <br>
             <select name="correct_answer">
                 <option value="{{$question['correctAnswer']}}" > {{$question['correctAnswer']}} </option>
                 @for($j=1; $j<=$question['optionsCount']; $j++)
-
-                    <option value="{{$question['option'.$j]}}"> {{$question['option'.$j]}} </option>
+                    <option value="{{$question['option'.$j]}}" id="{{$question['optionid'.$j]}}"> {{$question['option'.$j]}} </option>
                 @endfor
+
             </select>
+            <br>
             @for($j=1; $j<=$question['optionsCount']; $j++)
-                <input type="text" value="{{$question['option'.$j]}}" name="choices">
+                <div>
+                    <input type="button" value="x" style="width: 22" onclick="removeChoice(this.parentElement,'{{$question['optionid'.$j]}}')">
+                    <input type="text" value="{{$question['option'.$j]}}" name="choices" id="{{$question['optionid'.$j]}}" onchange="updateChoice({{$question['optionid'.$j]}},this.value)">
+                </div>
             @endfor
-            <input type="submit" value="save" >
         </div>
+        <a href="#" onclick="test(this.parentElement)"> test</a>
+        <a href="#" onclick="newOption(this.parentElement)">add option</a>
     </form>
 
 @endforeach
 <form  action="{{route('saveNewQuestions')}}" method="post">
     {{@csrf_field()}}
     <div id="newQuestions">
-    <input type="hidden" value="{{$quizID}}" name="quizID">
-    <input type="hidden" value="0" id="questionsCount" name="questionsCount">
+        <input type="hidden" value="{{$quizID}}" name="quizID">
+        <input type="hidden" value="0" id="questionsCount" name="questionsCount">
     </div>
     <input type="submit" value="finish">
 

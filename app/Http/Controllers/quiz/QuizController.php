@@ -78,12 +78,13 @@ class QuizController extends Controller
             $questionWithAnswer['correctAnswer'] =$question->answer_id;
             $j = 1;
             foreach ($options as $option){
-                $questionWithAnswer['option'.$j++] = $option->options;
+                $questionWithAnswer['option'.$j] = $option->options;
+                $questionWithAnswer['optionid'.$j++] = $option->option_id;
             }
             $questionWithAnswer['optionsCount'] = $j-1;
             $allQuestions[$i++] = $questionWithAnswer;
         }
-
+//        return $allQuestions;
         return view("staff/editQuiz",['questions'=>$allQuestions, 'quizID'=>$quizID]);
     }
 
