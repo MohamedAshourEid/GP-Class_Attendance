@@ -15,8 +15,32 @@ use Phpml\Clustering\KMeans;
 
 class KmeansController extends Controller
 {
-    public static function readData()
-    {
+    public static function kMeans(){
+        $studentsWithGrades = self::getData();
+        $clusterer = new KMeans(5);
+        $clusters = $clusterer->cluster($studentsWithGrades);
+        $performance = array();
+
+        for ($i = 0; $i < 5; $i++){
+            $students = array_keys($clusters[$i]);
+            $numberofstudents= count($students);
+            $numberofquizzes=count(array_values($clusters[$i])[0]);
+            $final=0;
+            for ($j = 0; $j < $numberofstudents; $j++) {
+                $sumofgrades = array_sum(array_values($clusters[$i])[$j]);
+                $averageofgrades=$sumofgrades/$numberofquizzes;
+                $final+=$averageofgrades;
+            }
+            $clusterDegree = ($final/$numberofstudents)*10;
+            $rate = self::getRate($clusterDegree);
+
+            self::saveStudentsPerformance($students,$rate);
+            $performance ["cluster ".($i+1)]=$rate;
+        }
+        print_r($performance);
+    }
+
+    public static function getData(){
         $studentIDs=Student::query()->select('student_id')
             ->get();
         $gradesData=Grade::query()->select('student_id','grade')
@@ -38,50 +62,17 @@ class KmeansController extends Controller
             }
             $studentsWithGrades[$id->student_id]=$gradesStudent;
         }
-        $clusterer = new KMeans(5);
-        $clusters = $clusterer->cluster($studentsWithGrades);
-        $performance = array();
+        return $studentsWithGrades;
+    }
 
-        for ($i = 0; $i < 5; $i++){
-            $students = array_keys($clusters[$i]);
-            $numberofstudents= count($students);
-            $numberofquizzes=count(array_values($clusters[$i])[0]);
-            $final=0;
-            for ($j = 0; $j < $numberofstudents; $j++)
-            {
+    public static function getRate($clusterDegree){
+        if ($clusterDegree>=85) $rate="A";
+        elseif ($clusterDegree>=75) $rate="B";
+        elseif ($clusterDegree>=65) $rate="C";
+        elseif ($clusterDegree>=50) $rate="D";
+        else $rate="F";
 
-                $sumofgrades = array_sum(array_values($clusters[$i])[$j]);
-                $averageofgrades=$sumofgrades/$numberofquizzes;
-
-                $final+=$averageofgrades;
-
-            }
-            $rate="";
-            if (($final/$numberofstudents)*10>=85){
-                $rate="A";
-
-            }
-            elseif (($final/$numberofstudents)*10>=75){
-                $rate="B";
-
-            }
-            elseif (($final/$numberofstudents)*10>=65){
-                $rate="C";
-
-            }
-            elseif (($final/$numberofstudents)*10>=50){
-                $rate="D";
-
-            }
-            else{
-                $rate="F";
-
-            }
-            self::saveStudentsPerformance($students,$rate);
-            $performance ["cluster ".($i+1)]=$rate;
-
-        }
-        print_r($performance);
+        return $rate;
     }
 
     public static function saveStudentsPerformance($students,$rate){
