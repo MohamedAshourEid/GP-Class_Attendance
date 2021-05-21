@@ -83,6 +83,6 @@ class KmeansController extends Controller
     }
 
     public static function saveStudentsPerformance($students,$rate){
-
+        print_r('hi');
     }
 }
