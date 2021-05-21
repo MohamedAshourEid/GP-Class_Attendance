@@ -76,13 +76,10 @@ class KmeansController extends Controller
                 $rate="F";
 
             }
-
-
             $performance ["cluster ".($i+1)]=$rate;
 
         }
         print_r($performance);
-
     }
 
     public static function saveStudentsPerformance($students,$rate){
