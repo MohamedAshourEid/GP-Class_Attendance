@@ -76,7 +76,7 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInputs($request->all());
         }
 
-        $userData=Instructor::where([['id','=',$request->id],['password','=', $request->password]])->first();
+        //$userData=Instructor::where([['id','=',$request->id],['password','=', $request->password]])->first();
 
         return validationController::checkLogin_data($request);
 

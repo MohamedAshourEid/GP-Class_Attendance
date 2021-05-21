@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Teach;
 
 use App\Http\Controllers\Controller;
-use App\Models\Enrolled_Courses;
+use App\Models\InstructorCourses;
 use Illuminate\Http\Request;
-use App\Models\Teach;
 class TeachController extends Controller
 {
     //
@@ -18,24 +17,24 @@ class TeachController extends Controller
     }
     /*get all courses that instructor teach it*/
     public static function getInstructorCourses($instructorID){
-        $result=Teach::query()->join('courses','teach.course_id','=',
+        $result=InstructorCourses::query()->join('courses','instructorcourses.course_id','=',
             'courses.course_id')
             ->select('courses.name','courses.course_id')
-            ->where('teach.instructor_id',
+            ->where('instructorcourses.instructor_id',
                 '=',$instructorID)
             ->get();
         if(!$result->isEmpty())
             return $result;
     }
     public static function getInstructorCoursesApi(Request $request){
-        return json_encode(Teach::query()->join('courses','courses.course_id','=',
-            'teach.course_id')
-            ->select('courses.name','courses.course_id')->where('teach.instructor_id',
+        return json_encode(InstructorCourses::query()->join('courses','courses.course_id','=',
+            'instructorcourses.course_id')
+            ->select('courses.name','courses.course_id')->where('instructorcourses.instructor_id',
                 '=',$request->instructorID)->get());
     }
     public function deleteInstructorCourse(Request $request)
     {
-        if(Teach::query()->where('course_id','=',$request->courseID)
+        if(InstructorCourses::query()->where('course_id','=',$request->courseID)
             ->where('instructor_id','=',$request->instructorID)
             ->delete())
         {

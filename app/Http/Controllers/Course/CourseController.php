@@ -5,8 +5,8 @@
 namespace App\Http\Controllers\Course;
 session()->start();
 use App\Models\Course;
-use App\Models\Teach;
-use App\Models\Enrolled_Courses;
+use App\Models\StudentCourses;
+use App\Models\InstructorCourses;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\requestTrait;
@@ -70,7 +70,7 @@ class CourseController extends Controller
     {
         if(!CourseController::search($request))
         {
-            $result=Teach::query()->where('course_id', '=', $request->courseID)
+            $result=InstructorCourses::query()->where('course_id', '=', $request->courseID)
                 ->Where('instructor_id', '=', $request->ID)
                 ->get();
             if($result->isEmpty())
@@ -98,7 +98,7 @@ class CourseController extends Controller
     */
     public static function checkIfStudentIsJoinedCourseAndSaveit(Request $request){
         if(!CourseController::search($request)) {
-            $result = Enrolled_Courses::query()->where('course_id', '=', "{$request->courseID}")
+            $result = StudentCourses::query()->where('course_id', '=', "{$request->courseID}")
                 ->Where('student_id', '=', "{$request->ID}")
                 ->get();
             if ($result->isEmpty()) {
@@ -121,7 +121,7 @@ class CourseController extends Controller
     /*
      * save instructor in teaching this course*/
     public static function save_instructor_in_course(Request $request){
-        if(Teach::create(['course_id'=>$request->courseID,
+        if(InstructorCourses::create(['course_id'=>$request->courseID,
             'instructor_id'=>$request->ID]))
         {
             return true;
@@ -131,7 +131,7 @@ class CourseController extends Controller
      *save student in this course
      */
     public static function save_student_in_course(Request $request){
-        if(Enrolled_Courses::create(['course_id'=>$request->courseID,
+        if(StudentCourses::create(['course_id'=>$request->courseID,
             'student_id'=>$request->ID]))
         {
             $message='You joined the course';
@@ -154,16 +154,16 @@ class CourseController extends Controller
     /*get all courses that student enrolled in it*/
     public function getEnrolledCourses(Request $request)
     {
-        return json_encode(Enrolled_Courses::query()->join('courses','courses.course_id','=',
-            'enrolled_courses.course_id')
-        ->select('courses.name')->where('enrolled_courses.student_id',
+        return json_encode(StudentCourses::query()->join('courses','courses.course_id','=',
+            'studentcourses.course_id')
+        ->select('courses.name')->where('studentcourses.student_id',
              '=',"$request->studentID")->get());
     }
     public static function deleteCourse(Request $request)
     {
         if(Course::query()->where('course_id','=',$request->courseID)->delete())
         {
-            if(Teach::query()->where('course_id','=',$request->courseID)->delete())
+            if(InstructorCourses::query()->where('course_id','=',$request->courseID)->delete())
             {
                 return view('staff/Courses');
             }

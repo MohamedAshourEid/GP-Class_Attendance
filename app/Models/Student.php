@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class Student extends Model
 {
     protected $table = "students";
-    protected $fillable = ['id', 'student_id','Fname','Lname', 'email', 'password'];
+    protected $fillable = ['student_id','Fname','Lname', 'email', 'password'];
 
     public $timestamps = false;
 

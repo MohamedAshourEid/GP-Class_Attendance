@@ -20,7 +20,7 @@ use App\Http\Controllers\Quiz\QuizController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('home1', function () {
+Route::get('home', function () {
     return view('staff/Home');
 });
 
@@ -47,7 +47,8 @@ Route::group(['middleware' => 'loggedin'],function (){
 Route::post('createAccount','User\userRegistration@signUp')->name("createAccount");
 Route::post('validate','User\userRegistration@login')->name('validate');
 Route::get('getData','K_Means\KmeansController@readData');
-Route::get('generate','Grade\GradeController@generate');
+Route::get('update','Grade\GradeController@update');
+Route::get('generate','Grade\GradeController@generateAttendanceData');
 Route::post('createSession','Session\SessionController@createSession')->name('create_session');
 Route::post('get_session','Session\SessionController@getSessionsOfCourse')->name('get_sessions');
 Route::view('course','staff/course');

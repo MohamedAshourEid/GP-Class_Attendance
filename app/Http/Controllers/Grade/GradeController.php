@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Grade;
 
+use App\Models\Attendance;
 use App\Models\Student;
 use Faker\Factory as faker;
 use App\Http\Controllers\Controller;
@@ -24,12 +25,6 @@ class GradeController extends Controller
         // Closing the file
         fclose($file);
     }
-    /*public function getAllData(){
-        $IDs=Student::query()->select('student_id')
-            ->get();
-        return count($IDs);
-
-    }*/
     public function generate(){
         //require_once 'vendor/autoload.php';
 
@@ -37,20 +32,41 @@ class GradeController extends Controller
         $IDs=Grade::query()->where('quiz_id','=',1)
             ->select('student_id')
         ->get();
-        //echo count($IDs);
-        //return ($IDs);
         $faker = Faker::create();
         // generate data by calling methods
         //$i=0;
-        for($i=1;$i<=500;$i++)
+        for($id=20170461;$id<20170501;$id++)
         {
-            /*Student::create(['student_id'=>$id->student_id,'Fname'=>$faker->firstName(),
-                'Lname'=>$faker->lastName(),'email'=>$faker->email(),'password'=>$faker->password()]);*/
-            //$i++;
-            //echo $id->student_id."+++";
-            //echo $faker->firstName()."<br>";
-            echo $faker->password()."<br>";
+            Student::create(['student_id'=>$id,'Fname'=>$faker->firstName(),
+                'Lname'=>$faker->lastName(),'email'=>$faker->email(),'password'=>$faker->password()]);
         }
 
     }
+    /*public static function update()
+    {
+        $allGrades= Grade::query()->where('quiz_id','=',6)
+            ->get();
+        foreach($allGrades as $grade)
+        {
+            $grade->course_id="IS215";
+            $grade->save();
+        }
+
+    }*/
+    /*public static function generateAttendanceData(){
+        //session id  ==>>2021-02-05 21:15:059hgx22801
+        //session id=>2021-04-01 23:06:4869qzl0800
+        //2021-05-01 23:06:4879qzl0700
+        //2021-05-10 10:06:4879qmn1200
+        //2021-03-28 12:30:4579qmn1200
+        //2021-04-28 8:00:4880qmn1800
+        for($id=20170001;$id<20170101;$id++)
+        {
+            $attend=rand(0,1);
+            Attendance::create(['course_id'=>'IS215','session_id'=>'2021-03-28 12:30:4579qmn1200',
+            'student_id'=>$id,'attended'=>$attend]);
+        }
+
+    }*/
+
 }
