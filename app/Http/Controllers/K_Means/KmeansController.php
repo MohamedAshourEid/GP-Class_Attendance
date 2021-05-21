@@ -42,9 +42,10 @@ class KmeansController extends Controller
         $performance = array();
 
         for ($i = 0; $i < 5; $i++){
-        $numberofstudents= count(array_keys($clusters[$i]));
-        $numberofquizzes=count(array_values($clusters[$i])[0]);
-        $final=0;
+            $students = array_keys($clusters[$i]);
+            $numberofstudents= count($students);
+            $numberofquizzes=count(array_values($clusters[$i])[0]);
+            $final=0;
             for ($j = 0; $j < $numberofstudents; $j++)
             {
 
@@ -76,7 +77,12 @@ class KmeansController extends Controller
 
             }
             $performance ["cluster ".($i+1)]=$rate;
+
         }
         print_r($performance);
+    }
+
+    public static function saveStudentsPerformance($students,$rate){
+
     }
 }
