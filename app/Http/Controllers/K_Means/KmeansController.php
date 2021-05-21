@@ -4,6 +4,7 @@ namespace App\Http\Controllers\K_Means;
 //require_once __DIR__ . '/vendor/autoload.php';
 
 use App\Models\question;
+use App\Models\StudentPerformance;
 use phpDocumentor\Reflection\Type;
 use Phpml\Classification\KNearestNeighbors;
 use App\Http\Controllers\Controller;
@@ -76,6 +77,7 @@ class KmeansController extends Controller
                 $rate="F";
 
             }
+            self::saveStudentsPerformance($students,$rate);
             $performance ["cluster ".($i+1)]=$rate;
 
         }
@@ -83,6 +85,11 @@ class KmeansController extends Controller
     }
 
     public static function saveStudentsPerformance($students,$rate){
-        print_r('hi');
+        foreach ($students as $student){
+            StudentPerformance::create([
+                'student_id' => $student,
+                'performance' => $rate
+            ]);
+        }
     }
 }
