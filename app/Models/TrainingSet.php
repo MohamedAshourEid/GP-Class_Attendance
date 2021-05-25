@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models;
 
+namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class StudentPerformance extends Model
+
+class TrainingSet extends Model
 {
-    protected $table = "studentsPerformance";
+    protected $table = "trainingset";
     protected $fillable = ['student_id','performance','attendance','fail/pass'];
 
     public $timestamps = false;
