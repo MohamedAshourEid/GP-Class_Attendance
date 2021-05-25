@@ -81,4 +81,6 @@ Route::post('removeChoice','quiz\QuestionController@removeChoice')->name('remove
 
 Route::post('updatequestion', 'quiz\QuestionController@update')->name('updateQuestion');
 
-Route::get('getData','K_Means\KmeansController@kMeans');
+Route::get('getData','K_Means\KmeansController@kMeansquiz');
+
+Route::get('Data','Naeve\NaeveController@naeve');
