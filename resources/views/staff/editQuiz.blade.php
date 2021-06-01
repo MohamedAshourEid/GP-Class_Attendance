@@ -19,8 +19,6 @@
     }
 
     function removeQuestion(node,questionID) {
-        // alert(questionID);
-        // alert(questionID);
         $.ajax({
             url: "{{ route('removeQuestion') }}",
             type: 'POST',
@@ -166,7 +164,9 @@
         newOption2(question.id,options,correctAnswer,optionCount)
     };
 
-    var newOption = function(question) {
+    var displayOption = function (question){
+        var optionDiv = document.createElement('div');
+
         var questionID = question['questionID'].value;
         var questionOption = document.createElement('input');
         questionOption.type = 'text';
@@ -185,15 +185,55 @@
 
         var location = document.getElementById(question['questionID'].value)
         // alert("location " + location)
-        location.appendChild(questionOption);
+
+
         var option = document.createElement('option');
         option.value = questionOption.value;
         option.id = 'C'+newOptionID;
         option.name = 'C'+newOptionID;
         option.innerHTML = questionOption.value;
         question['correct_answer'].appendChild(option);
+        var close = document.createElement('input');
+        close.type = 'button';
+        close.value = 'x';
+        close.style.width = '26px';
+        close.onclick = function() {
+            var parent = this.parentNode;
+            parent.parentNode.removeChild(parent);
+
+            document.getElementById(option.id).remove();
+
+        };
+        optionDiv.appendChild(close);
+        optionDiv.appendChild(questionOption)
+        location.appendChild(optionDiv);
         var br2 = document.createElement('br');
         location.appendChild(br2);
+    }
+
+    var newOption = function(question) {
+        $.ajax({
+            url: "{{ route('addOption') }}",
+            type: 'POST',
+            datatype:"json",
+            data:{
+                id: question["questionID"].value,
+                quizID:{{$quizID}}
+            },
+            success:function(optionID){
+                displayOption(question,optionID);
+                // alert(data);
+                // console.log(data);
+            },
+            // error:function(xhr,status,error){
+            //     $.each(xhr.responseJSON.errors,function (key,item)
+            //         {
+            //             alert(item)
+            //         }
+            //     );
+            // }
+        });
+
 
     };
 
@@ -232,8 +272,9 @@
             <select name="correct_answer">
                 <option value="{{$question['correctAnswer']}}" > {{$question['correctAnswer']}} </option>
                 @for($j=1; $j<=$question['optionsCount']; $j++)
-                    <option value="{{$question['option'.$j]}}" id="{{$question['optionid'.$j]}}"> {{$question['option'.$j]}} </option>
-                @endfor
+                    @if($question['option'.$j] != $question['correctAnswer'])
+                        <option value="{{$question['option'.$j]}}" id="{{$question['optionid'.$j]}}"> {{$question['option'.$j]}} </option>
+                    @endif                @endfor
 
             </select>
             <br>
@@ -244,7 +285,7 @@
                 </div>
             @endfor
         </div>
-        <a href="#" onclick="test(this.parentElement)"> test</a>
+{{--        <a href="#" onclick="test(this.parentElement)"> test</a>--}}
         <a href="#" onclick="newOption(this.parentElement)">add option</a>
     </form>
 
