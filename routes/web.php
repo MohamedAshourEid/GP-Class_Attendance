@@ -78,6 +78,7 @@ Route::post('saveNewQuestions','quiz\QuestionController@saveQuestions')->name('s
 
 Route::post('removeQuestion','quiz\QuestionController@destroy')->name('removeQuestion');
 Route::post('removeChoice','quiz\QuestionController@removeChoice')->name('removeChoice');
+Route::post('addOption','quiz\QuestionController@addOption')->name('addOption');
 
 Route::post('updatequestion', 'quiz\QuestionController@update')->name('updateQuestion');
 

@@ -102,6 +102,12 @@ class QuestionController extends Controller
             ->delete();
     }
 
+    public function addOption(Request $request){
+        $questionID = $request->id;
+        $quizID = $request->quizID;
+        self::saveChoice($questionID,$quizID,"");
+    }
+
     /**
      * Store a newly created resource in storage.
      *
