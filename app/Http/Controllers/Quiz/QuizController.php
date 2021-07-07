@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Question\QuestionController;
 use App\Http\Controllers\Traits\requestTrait;
 use App\Models\Answer;
+use App\Models\Grade;
 use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
@@ -57,9 +58,26 @@ class QuizController extends Controller
         }
     }
 
-    public function quizCorrection(Request $request){
+    public static function quizCorrection(Request $request){
+
+        $questionIDS=$request->questionIDList;
+        $answers=$request->answersList;
+        //return $request->quizID;
+        $grade=0;
+        for($i=0;$i<count($questionIDS);$i++)
+        {
+            $grade+=self::checkAnswer($request->quizID,$answers[$i],$questionIDS[$i]);
+        }
+        if(Grade::create(['student_id'=>$request->studentID,'quiz_id'=>$request->quizID,'course_id'=>$request->courseID,
+            'grade'=>$grade]))
+        {
+            return json_encode('Done');
+        }
+        else{
+            json_encode('Error');
+        }
 //      $str = '[{"question_id":"q1.question1","answer_id":"q1.question1.o3"},{"question_id":"q1.question2","answer_id":"q1.question2.o1"}]';
-        $str = $request->str;
+        /*$str = $request->str;
         $questions = json_decode($str,false);
         $grade = 0;
         foreach ($questions as $question){
@@ -72,15 +90,26 @@ class QuizController extends Controller
             'grade' => $grade
         ]);
 
-        return json_encode($grade);
+        return json_encode($grade);*/
     }
 
-    public function checkAnswer($question){
-        return quizQuestion::query()
-            ->where('id', '=', "{$question->question_id}")
-            ->Where('answer_id', '=', "{$question->answer_id}")
+    public static function checkAnswer($quizID,$answer,$questionID){
+        return Question::query()
+            ->where('id', '=', $questionID)
+            ->where('quiz_id','=',$quizID)
+            ->where('answer','=',$answer)
             ->count();
 
+
+
+    }
+    public static function getQuizzesGrades(Request $request)
+    {
+        return json_encode(Grade::query()->join('quiz','quiz.id','=','grades.quiz_id')
+            ->where('grades.student_id','=',$request->studentID)
+            ->where('grades.course_id','=',$request->courseID)
+            ->select('grades.grade','quiz.topic')
+            ->get());
     }
     /*Delete quiz*/
     /*public function deleteQuiz(Request $request){
@@ -140,30 +169,33 @@ class QuizController extends Controller
         return view('staff/quizzes',[ 'quizes' =>$quizes]);
     }
 
-    public function showQuiz($quizID){
+    public function showQuiz(Request $request){
         $questions = Question::query()
-            ->where('quiz_id', '=', "{$quizID}")
+            ->where('quiz_id', '=', $request->quizID)
             ->get();
         $allQuestions =array();
-        $i = 1;
         foreach ($questions as $question) {
+            /** @var TYPE_NAME $questionWithAnswer */
             $questionWithAnswer =array();
 
             $options = Answer::query()
                 ->where('question_id', '=', "{$question->id}")
                 ->get();
-//
-            $questionWithAnswer['question'.$i] =$question->content;
-            $questionWithAnswer['correctAnswer'.$i] =$question->answer;
-            $j = 1;
+            $questionWithAnswer['question'] =$question->content;
+            $questionWithAnswer['questionID'] =$question->id;
+            $questionWithAnswer['correctAnswer'] =$question->answer;
+            /** @var TYPE_NAME $options_of_questions */
+            $options_of_questions=[];
             foreach ($options as $option){
-                $questionWithAnswer['option'.$j++] = $option->content;
+                $options_of_questions[]=$option->content;
 
             }
-            $questionWithAnswer['optionsCount'.$i] = $j;
-            $allQuestions[$i] = $questionWithAnswer;
-            $i++;
+            $questionWithAnswer['options']=$options_of_questions;
+            $allQuestions[] = $questionWithAnswer;
 
+        }
+        if($request->wantsJson()) {
+            return json_encode($allQuestions);
         }
         return view("staff/editQuiz",['questions'=>$allQuestions]);
 

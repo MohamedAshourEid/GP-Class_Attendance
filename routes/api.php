@@ -31,5 +31,7 @@ Route::post('getAttendanceOfSession','Attendance\AttendanceController@getAttenda
 Route::post('getAnsence','Attendance\AttendanceController@getNumOfAbsencesInCourse');
 Route::post('getTeachedCourses','Teach\TeachController@getInstructorCoursesApi');
 Route::post('getTopicsOfQuizzes','Quiz\QuizController@getQuizzes');
-Route::post('getQuestionsandAnswersOfQuiz','Quiz\QuizController@getQuestionsandAnswersOfQuiz');
+Route::post('getQuestionsandAnswersOfQuiz','Quiz\QuizController@showQuiz');
+Route::post('correctQuiz','Quiz\QuizController@quizCorrection');
+Route::post('getQuizzesGrades','Quiz\QuizController@getQuizzesGrades');
 

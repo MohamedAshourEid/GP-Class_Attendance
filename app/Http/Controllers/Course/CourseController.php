@@ -156,7 +156,7 @@ class CourseController extends Controller
     {
         return json_encode(StudentCourses::query()->join('courses','courses.course_id','=',
             'studentcourses.course_id')
-        ->select('courses.name')->where('studentcourses.student_id',
+        ->select('courses.name','courses.course_id')->where('studentcourses.student_id',
              '=',"$request->studentID")->get());
     }
     public static function deleteCourse(Request $request)

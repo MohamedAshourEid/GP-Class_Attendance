@@ -55,7 +55,7 @@ class AttendanceController extends Controller
         $numOfAttendance=Attendance::query()->where('course_id','=',$request->courseID)
             ->where('student_id','=',$request->studentID)
             ->get()->count();
-        return json_encode($numSessions-$numOfAttendance);
+        return json_encode(strval($numSessions-$numOfAttendance));
 
     }
 

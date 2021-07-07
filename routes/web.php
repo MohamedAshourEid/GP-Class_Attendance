@@ -5,7 +5,7 @@ use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Session\SessionController;
 use App\Http\Controllers\Attendance\AttendanceController;
 use App\Http\Controllers\Quiz\QuizController;
-
+use App\Http\Controllers\Predection\PredectionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -103,6 +103,10 @@ Route::get('createQuiz/{courseID}',function ($courseID){
 Route::post('savequiz','quiz\QuizController@createQuiz')->name('savequiz');
 Route::get('removeQuestion','quiz\QuestionController@destroy')->name('removeQuestion');
 
+//generate data for predection
+Route::get('generateFinal',[PredectionController::class,'generateStudentResults']);
+Route::get('predict',[PredectionController::class,'predictFinalGrade']);
+//predictFinalGrade
 
 
 

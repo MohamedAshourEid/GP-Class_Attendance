@@ -126,23 +126,22 @@
 </script>
 <h1>hello</h1>
 
-{{$i = 0}}
 <form id="sections">
     @foreach($questions as $question)
         <div>
             <input type="hidden" value="2" id="questionsCount" name="questionsCount">
             <input type="button" value="x" style="width: 26" onclick="removeQuestion(this.parentElement,'q8question1')">
-            <input type="text" value="{{$question['question'.++$i]}}">
+            <input type="text" value="{{$question['question']}}">
             <select>
-                <option value="{{$question['correctAnswer'.$i]}}"> {{$question['correctAnswer'.$i]}} </option>
-                @for($j=1; $j<$question['optionsCount'.$i]; $j++)
+                {{--<option value="{{$question['correctAnswer']}}"> {{$question['correctAnswer']}} </option>--}}
+                @for($j=0; $j<count($question['options']); $j++)
 
-                    <option value="{{$question['option'.$j]}}"> {{$question['option'.$j]}} </option>
+                    <option value="{{$question['options'][$j]}}"> {{$question['options'][$j]}} </option>
                 @endfor
             </select>
-            @for($j=1; $j<$question['optionsCount'.$i]; $j++)
+            @for($j=0; $j<count($question['options']); $j++)
 
-                <input type="text" value="{{$question['option'.$j]}}">
+                <input type="text" value="{{$question['options'][$j]}}">
             @endfor
             <input type="button" value="save" onclick="saveQuestion(this.parentElement)">
         </div>

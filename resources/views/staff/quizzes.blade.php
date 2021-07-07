@@ -20,7 +20,7 @@ if(session()->has('courseID'))
 @foreach($quizes as $quiz)
     <div class="row">
         <div class="col-sm-4">
-            <a  type="button" class="btn btn-defult btn-lg" href={{route('showQuize',['quizID' => $quiz->id])}}>
+            <a  type="button" class="btn btn-defult btn-lg" href={{route('showQuiz',['quizID' => $quiz->id])}}>
                 {{$quiz->topic}}  </a>
         </div>
         <div class="col-sm-4">
