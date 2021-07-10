@@ -91,7 +91,10 @@ class NaeveController extends Controller
 
         return array($samplesarray, $labelsarray);
     }
-    public static function Saveprediction($student_id,$prediction){
+
+
+    public static function Saveprediction($student_id,$prediction)
+    {
         StudentPerformance::where('student_id', $student_id)
             ->update([
                 'fail/pass' => $prediction
