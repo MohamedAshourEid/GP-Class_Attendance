@@ -1,15 +1,15 @@
-
 <?php
-session_start();
-session(['courseID' => $courseID,'Announcements'=>$Announcements]);
-
+if(session()->has('courseID')and session()->has('Announcements'))
+{
+    $courseID=session()->get('courseID');
+    $announcements=session()->get('Announcements');
+}
 ?>
-
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
 
-    <title>course</title>
+    <title>make announcement</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -53,7 +53,19 @@ session(['courseID' => $courseID,'Announcements'=>$Announcements]);
         }
 
     </style>
+    <script>
+        $(function(){
+            $(".makeEditable").click(function(){
+                $('input:text').removeAttr("readonly");
+            });
+            $(".makeNonEditable").click(function(){
+                $('input:text').attr("readonly", "readonly");
+            });
+        })
+
+    </script>
 </head>
+
 <body>
 
 <div class="container-fluid">
@@ -72,21 +84,35 @@ session(['courseID' => $courseID,'Announcements'=>$Announcements]);
 </div>
 
 <div class="container text-center">
-    <div class="row">
+    {{--<div class="row">
         <h1>{{$courseID}}</h1>
-    </div>
+    </div>--}}
 
 
     <div class="row">
-        <a href={{route('createSession')}}><button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">Create Session</button>
-        </a>
-    </div>
-    <div class="row">
-        <a href={{route('showQuizes',['courseID' => $courseID])}}><button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-check"></span> Quizes</button></a>
-    </div>
-    <div class="row">
 
-        <a href={{route('announcements',['courseID' => $courseID])}}><button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-bullhorn"></span>  Make an announcement</button></a>
+        <form action="{{route('makepost')}}" method="post">
+        @csrf <!-- {{ csrf_field() }} -->
+
+            <input type="hidden" name='courseID' value={{$courseID}}> <br>
+
+            <span>Announcement</span>
+            <input class="s_name" type="text" name='announcement' > <br>
+            <button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">post </button>
+        </form>
+        <div>
+            @foreach($announcements as $announce)
+                <div class="row">
+                    {{$announce->body}}
+                    <a href={{route('updatepost',['courseID' => $courseID,'postid'=>$announce->id,'body'=>$announce->body])}} >
+                    <button type="button" >   update</button></a>
+                    <a href={{route('deletepost',['courseID' => $courseID,'postid'=>$announce->id,'body'=>$announce->body])}} >
+                        <button type="button">   delete</button></a>
+
+
+                </div>
+            @endforeach
+        </div>
     </div>
 </div>
 

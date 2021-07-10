@@ -35,6 +35,7 @@ class KmeansController extends Controller
                 $averageofgrades=$sumofgrades/$numberofquizzes;
                 $final+=$averageofgrades;
             }
+
             $clusterDegree = ($final/$numberofstudents)*10;
             $rate = self::getRate($clusterDegree);
 
