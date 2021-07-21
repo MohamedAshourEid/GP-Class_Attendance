@@ -60,6 +60,7 @@ class KmeansController extends Controller
                 $averageofattended=$sumofattended/$numberofsessions;
                 $attended+=$averageofattended;
             }
+            return($attended);
             $clusterDegree = ($attended/$numberofstudents);
             $regularity = self::getRegularity($clusterDegree);
 

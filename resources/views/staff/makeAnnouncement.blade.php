@@ -92,7 +92,7 @@ if(session()->has('courseID')and session()->has('Announcements'))
     <div class="row">
 
         <form action="{{route('makepost')}}" method="post">
-        @csrf <!-- {{ csrf_field() }} -->
+        @csrf
 
             <input type="hidden" name='courseID' value={{$courseID}}> <br>
 
@@ -100,6 +100,13 @@ if(session()->has('courseID')and session()->has('Announcements'))
             <input class="s_name" type="text" name='announcement' > <br>
             <button type="submit" class="btn btn-defult btn-lg" formtarget="_blank">post </button>
         </form>
+
+
+
+
+
+
+
         <div>
             @foreach($announcements as $announce)
                 <div class="row">

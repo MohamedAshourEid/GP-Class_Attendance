@@ -88,6 +88,10 @@ session(['courseID' => $courseID,'Announcements'=>$Announcements]);
 
         <a href={{route('announcements',['courseID' => $courseID])}}><button type="button" class="btn btn-defult btn-lg" > <span class="glyphicon glyphicon-bullhorn"></span>  Make an announcement</button></a>
     </div>
+    <div class="row">
+
+        <a href={{route('getreports',['courseID' => $courseID])}}><button type="button" class="btn btn-defult btn-lg" >   get regular students </button></a>
+    </div>
 </div>
 
 </body>

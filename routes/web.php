@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Session\SessionController;
 use App\Http\Controllers\Attendance\AttendanceController;
+use App\Http\Controllers\Reports\TopFive;
+use App\Http\Controllers\UserChartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +39,6 @@ Route::group(['prefix'=>'Registeration'],function(){
     //Route::get('signup','User\UserController@signup')->name('signup');
 
 });
-
 Route::group(['middleware' => 'loggedin'],function (){
     Route::view('course','staff/course');
     //Route::get('/courseView/{courseID}','Course\CourseController@showCourse');
@@ -49,10 +50,10 @@ Route::post('createAccount','User\userRegisteration@signUp')->name("createAccoun
 Route::post('validate','User\userRegisteration@login')->name('validate');
 Route::post('createSession','Session\SessionController@createSession')->name('create_session');
 //Route::get('view','Course\CourseController@makeAnnouncement')->name('makeAnnouncement');
-Route::post('makepost','Course\CourseController@makepost')->name('makepost');
-Route::get('updatepost','Course\CourseController@updatepost')->name('updatepost');
-Route::get('saveupdate','Course\CourseController@saveupdate')->name('saveupdate');
-Route::get('deletepost','Course\CourseController@deletepost')->name('deletepost');
+Route::post('makepost','Course\AnnouncementController@makepost')->name('makepost');
+Route::get('updatepost','Course\AnnouncementController@updatepost')->name('updatepost');
+Route::get('saveupdate','Course\AnnouncementController@saveupdate')->name('saveupdate');
+Route::get('deletepost','Course\AnnouncementController@deletepost')->name('deletepost');
 
 Route::view('course','staff/course');
 Route::view('signup','Registeration.SignUp')->name('signup');
@@ -78,6 +79,7 @@ Route::get('/flush', function () {
     Session::flush();
     return redirect()->route('login');
 })->name('flush');
+Route::get('users', 'UserChartController@index');
 
 Route::view('/createquiz/{courseID}','staff/quiz');
 Route::get('createQuiz/{courseID}',function ($courseID){
@@ -85,6 +87,8 @@ Route::get('createQuiz/{courseID}',function ($courseID){
 })->name('createQuiz');
 Route::post('savequiz','quiz\QuizController@createQuiz')->name('savequiz');
 Route::post('saveNewQuestions','quiz\QuestionController@saveQuestions')->name('saveNewQuestions');
+
+Route::get('getreport','Reports\TopFive@getTopFive')->name('getreports');
 
 Route::post('removeQuestion','quiz\QuestionController@destroy')->name('removeQuestion');
 Route::post('removeChoice','quiz\QuestionController@removeChoice')->name('removeChoice');

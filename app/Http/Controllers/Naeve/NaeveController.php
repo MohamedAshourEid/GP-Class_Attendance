@@ -100,5 +100,6 @@ class NaeveController extends Controller
                 'fail/pass' => $prediction
             ]);
     }
+
 }
 
